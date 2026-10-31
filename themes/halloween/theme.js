@@ -23,14 +23,14 @@
     st.textContent = `
 #om-deco { position:fixed; inset:0; z-index:60; pointer-events:none; overflow:hidden; }
 #om-deco .omw { position:absolute; top:0; left:0; opacity:.85; } #om-deco .omw.r { left:auto; right:0; transform:scaleX(-1); }
-#om-deco .fog { position:absolute; left:-30%; width:160%; height:420px; background:radial-gradient(closest-side, rgba(180,120,255,.22), transparent); filter:blur(30px); animation:omfog 38s linear infinite alternate; }
-#om-deco .fog.a { bottom:-120px; } #om-deco .fog.b { bottom:60px; animation-duration:52s; animation-direction:alternate-reverse; opacity:.7; background:radial-gradient(closest-side, rgba(255,120,30,.2), transparent); }
+#om-deco .fog { position:absolute; left:-30%; width:160%; height:420px; background:radial-gradient(closest-side, rgba(180,120,255,.22), rgba(180,120,255,.1) 55%, transparent); animation:omfog 38s linear infinite alternate; }
+#om-deco .fog.a { bottom:-120px; } #om-deco .fog.b { bottom:60px; animation-duration:52s; animation-direction:alternate-reverse; opacity:.7; background:radial-gradient(closest-side, rgba(255,120,30,.2), rgba(255,120,30,.09) 55%, transparent); }
 @keyframes omfog { from { transform:translateX(-12%); } to { transform:translateX(12%); } }
 #om-deco .ember { position:absolute; bottom:-20px; width:6px; height:6px; border-radius:50%; background:#ff9a3c; box-shadow:0 0 12px 3px rgba(255,140,40,.7); opacity:0; animation:omember linear infinite; }
 @keyframes omember { 0% { opacity:0; transform:translate(0,0); } 12% { opacity:.9; } 100% { opacity:0; transform:translate(var(--ex),-1500px); } }
-#om-deco .omb { position:absolute; filter:drop-shadow(0 0 14px rgba(0,0,0,.8)); animation:ombat linear forwards; }
+#om-deco .omb { position:absolute; text-shadow:0 0 14px rgba(0,0,0,.8); animation:ombat linear forwards; }
 @keyframes ombat { 0% { transform:translate(0,0) scaleY(1); } 25% { transform:translate(calc(var(--dx)*.25),calc(var(--wob)*-1)) scaleY(.7); } 50% { transform:translate(calc(var(--dx)*.5),var(--wob)) scaleY(1); } 75% { transform:translate(calc(var(--dx)*.75),calc(var(--wob)*-.8)) scaleY(.7); } 100% { transform:translate(var(--dx),0) scaleY(1); } }
-#om-deco .omg { position:absolute; bottom:-160px; opacity:0; filter:drop-shadow(0 0 24px rgba(200,170,255,.7)); animation:omghost 14s ease-in-out forwards; }
+#om-deco .omg { position:absolute; bottom:-160px; opacity:0; text-shadow:0 0 24px rgba(200,170,255,.7); animation:omghost 14s ease-in-out forwards; }
 @keyframes omghost { 0% { opacity:0; transform:translate(0,0); } 15% { opacity:.55; } 50% { transform:translate(80px,-900px); } 85% { opacity:.5; } 100% { opacity:0; transform:translate(-40px,-2100px); } }
 #om-deco .oml { position:absolute; inset:0; background:radial-gradient(circle at 50% 20%, rgba(220,200,255,.55), rgba(120,80,255,.15) 60%, transparent); animation:omlight .9s ease-out forwards; }
 @keyframes omlight { 0% { opacity:0; } 6% { opacity:1; } 14% { opacity:.15; } 22% { opacity:.85; } 100% { opacity:0; } }

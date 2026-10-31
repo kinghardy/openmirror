@@ -181,8 +181,8 @@
 #pw-saver .ms .t { margin-top:34px; font-size:64px; font-weight:800; letter-spacing:-1px; max-width:960px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-align:center; }
 #pw-saver .ms .a { margin-top:6px; font-size:40px; font-weight:600; color:var(--ac); max-width:960px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 #pw-saver .ms .pb { width:760px; height:12px; border-radius:6px; background:rgba(255,255,255,.2); overflow:hidden; margin-top:26px; }
-#pw-saver .ms .pb i { display:block; height:100%; width:0; background:linear-gradient(90deg,var(--ac),#fff); animation:msFill var(--d) linear var(--o) forwards; animation-play-state:var(--ps); }
-@keyframes msFill { from { width:0 } to { width:100% } }
+#pw-saver .ms .pb i { display:block; height:100%; width:100%; transform:scaleX(0); transform-origin:left; background:linear-gradient(90deg,var(--ac),#fff); animation:msFill var(--d) linear var(--o) forwards; animation-play-state:var(--ps); }
+@keyframes msFill { from { transform:scaleX(0) } to { transform:scaleX(1) } }   /* (scaling, not width: no layout per frame) */
 #pw-saver .ms .up { align-self:stretch; margin-top:40px; }
 #pw-saver .ms .up h3 { margin:0 0 16px 6px; font-size:28px; letter-spacing:.16em; text-transform:uppercase; color:rgba(255,255,255,.65); }
 #pw-saver .ms .ur { display:flex; gap:22px; }
@@ -212,7 +212,7 @@
 #pw-saver .ms .wall { position:absolute; left:0; right:0; top:0; height:1640px; display:grid; grid-template-columns:repeat(4,1fr); grid-auto-rows:1fr; }
 #pw-saver .ms .wall img { width:100%; height:100%; object-fit:cover; display:block; filter:brightness(.55) saturate(1.2); animation:msIn .9s both; }
 @keyframes msIn { from { opacity:0; transform:scale(.8) } }
-#pw-saver .ms .wc { padding:34px 40px 40px; border-radius:44px; background:rgba(8,8,16,.82); border:2px solid rgba(255,255,255,.22); backdrop-filter:blur(16px); display:flex; flex-direction:column; align-items:center; text-align:center; box-shadow:0 40px 100px rgba(0,0,0,.7); max-width:840px; }
+#pw-saver .ms .wc { padding:34px 40px 40px; border-radius:44px; background:rgba(8,8,16,.86); border:2px solid rgba(255,255,255,.22); display:flex; flex-direction:column; align-items:center; text-align:center; box-shadow:0 40px 100px rgba(0,0,0,.7); max-width:840px; }
 #pw-saver .ms .wc img { width:460px; height:460px; border-radius:28px; object-fit:cover; }
 #pw-saver .ms .wc .t { font-size:54px; margin-top:26px; max-width:760px; } #pw-saver .ms .wc .a { font-size:36px; max-width:760px; }
 #pw-saver .ms.dj { font-family:'Oswald','Arial Narrow','Roboto Condensed',Impact,sans-serif; text-transform:uppercase; }
@@ -256,7 +256,7 @@
 #pw-saver .ms.say .sq { margin-top:26px; font-size:30px; font-weight:600; color:rgba(255,255,255,.75); text-align:center; }
 #pw-saver .ms .qrs { position:absolute; left:40px; top:40px; z-index:8; display:flex; align-items:center; gap:16px; background:rgba(8,8,16,.7); border:2px solid rgba(255,255,255,.22); border-radius:24px; padding:10px 22px 10px 10px; font-size:26px; font-weight:800; }
 #pw-saver .ms .qrs img { width:120px; height:120px; border-radius:12px; background:#fff; padding:6px; image-rendering:pixelated; } #pw-saver .ms .qrs small { display:block; font-size:20px; font-weight:600; color:rgba(255,255,255,.7); }
-#pw-party { position:absolute; bottom:22px; right:60px; z-index:8; display:none; align-items:center; gap:14px; background:rgba(8,8,16,.8); border:2px solid rgba(255,255,255,.22); border-radius:40px; padding:8px 24px 8px 8px; font-size:25px; font-weight:700; color:#fff; white-space:nowrap; max-width:640px; backdrop-filter:blur(14px); }
+#pw-party { position:absolute; bottom:22px; right:60px; z-index:8; display:none; align-items:center; gap:14px; background:rgba(8,8,16,.86); border:2px solid rgba(255,255,255,.22); border-radius:40px; padding:8px 24px 8px 8px; font-size:25px; font-weight:700; color:#fff; white-space:nowrap; max-width:640px; }   /* (no backdrop blur: it was redone whenever anything behind it moved) */
 #pw-party.on { display:flex; }
 #pw-saver.music #pw-party { display:none; }
 #pw-party .y { width:46px; height:46px; border-radius:50%; background:#ffc20e; color:#3a2a00; display:flex; align-items:center; justify-content:center; font-size:30px; font-weight:900; flex:none; }

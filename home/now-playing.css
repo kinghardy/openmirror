@@ -11,8 +11,11 @@
 #np-mini.compact { width:104px; padding:10px; gap:0; }
 #np-mini.compact .tx { flex:0; width:0; opacity:0; overflow:hidden; }
 #np-mini.compact .eq { display:none; }
-#np-mini.compact:not(.paused) { animation:npRing 2.4s ease-in-out infinite; }
-@keyframes npRing { 0%,100% { box-shadow:0 14px 34px rgba(0,0,0,.4), 0 0 14px color-mix(in srgb, var(--np-accent,#ff5a8a) 30%, transparent); } 50% { box-shadow:0 14px 34px rgba(0,0,0,.4), 0 0 34px color-mix(in srgb, var(--np-accent,#ff5a8a) 70%, transparent); } }
+/* the compact card's breathing ring: an inner glow that only changes opacity (no repaint per frame) */
+#np-mini::after { content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none; opacity:0;
+  box-shadow:inset 0 0 0 2px color-mix(in srgb, var(--np-accent,#ff5a8a) 70%, transparent), inset 0 0 22px color-mix(in srgb, var(--np-accent,#ff5a8a) 60%, transparent); }
+#np-mini.compact:not(.paused)::after { animation:npRing 2.4s ease-in-out infinite; }
+@keyframes npRing { 0%,100% { opacity:.15 } 50% { opacity:1 } }
 #np-mini.pop { animation:npPop .7s cubic-bezier(.2,.9,.3,1.3); }
 @keyframes npPop { 0% { transform:scale(.9) } 100% { transform:none } }
 body.pw-fs #np-mini, body.arcade-live #np-mini { display:none; }
@@ -21,10 +24,10 @@ body.pw-fs #np-mini, body.arcade-live #np-mini { display:none; }
 #np-mini .t { color:#fff; font:700 27px/1.15 -apple-system,'Segoe UI',Roboto,sans-serif; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 #np-mini .a { color:#c3bde0; font:500 22px/1.25 -apple-system,'Segoe UI',Roboto,sans-serif; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:2px; }
 #np-mini .eq { display:flex; gap:4px; align-items:flex-end; height:30px; flex:none; }
-#np-mini .eq i { width:6px; border-radius:3px; background:var(--np-accent,#ff5a8a); animation:npEq2 .9s ease-in-out infinite; }
+#np-mini .eq i { width:6px; height:30px; border-radius:3px; background:var(--np-accent,#ff5a8a); transform-origin:bottom; animation:npEq2 .9s ease-in-out infinite; }
 #np-mini .eq i:nth-child(2) { animation-delay:-.25s } #np-mini .eq i:nth-child(3) { animation-delay:-.5s } #np-mini .eq i:nth-child(4) { animation-delay:-.7s }
-@keyframes npEq2 { 0%,100% { height:6px } 50% { height:30px } }
-#np-mini.paused .eq i { animation:none; height:6px; opacity:.45; }
+@keyframes npEq2 { 0%,100% { transform:scaleY(.2) } 50% { transform:scaleY(1) } }
+#np-mini.paused .eq i { animation:none; transform:scaleY(.2); opacity:.45; }
 #np-mini .pg { position:absolute; left:0; bottom:0; height:4px; width:100%; background:rgba(255,255,255,.12); }
 #np-mini .pg i { display:block; height:100%; width:0; background:var(--np-accent,#ff5a8a); }
 
@@ -39,7 +42,9 @@ body.pw-fs #np-mini, body.arcade-live #np-mini { display:none; }
 /* full player */
 #app-music { background:#07060d; padding:0; overflow:hidden; color:#fff; }
 #np-root { position:absolute; inset:0; font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; }
-.np-bg { position:absolute; inset:-120px; background:var(--np-art) center/cover; filter:blur(70px) brightness(.55) saturate(1.7); animation:npDrift 40s ease-in-out infinite alternate; transition:opacity .8s; }
+/* the blur sits on a child so it is drawn once into the drifting layer; on the drifting element itself it was redone every frame */
+.np-bg { position:absolute; inset:-120px; animation:npDrift 40s ease-in-out infinite alternate; transition:opacity .8s; }
+.np-bg::before { content:""; position:absolute; inset:0; background:var(--np-art) center/cover; filter:blur(70px) brightness(.55) saturate(1.7); }
 @keyframes npDrift { from { transform:scale(1.05) translate(-2%,-1%) } to { transform:scale(1.25) translate(2%,2%) } }
 .np-shade { position:absolute; inset:0; background:linear-gradient(180deg,rgba(7,6,13,.35) 0%,rgba(7,6,13,.15) 40%,rgba(7,6,13,.75) 100%); }
 .np-wrap { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; padding:84px 60px 54px; }

@@ -5,25 +5,29 @@
     // Same idea as the menu pad_quit.py draws during games; this one is for the dashboard and every channel on it, the music app included.
     (function () {
       const css = document.createElement('style');
-      css.textContent = `#xm { position:fixed; inset:0; z-index:6000; display:none; align-items:center; justify-content:center; background:rgba(4,4,10,.82); backdrop-filter:blur(18px); font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; color:#fff; }
-#xm.on { display:flex; }
-#xm .card { width:940px; background:rgba(24,24,36,.96); border:2px solid rgba(255,255,255,.16); border-radius:44px; padding:44px 44px 36px; box-shadow:0 40px 100px rgba(0,0,0,.7); }
+      css.textContent = `#xm { position:fixed; inset:0; z-index:6000; display:none; align-items:center; justify-content:center; font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; color:#f3f5fb;
+  background:radial-gradient(900px 700px at 50% 30%, color-mix(in srgb, var(--ui-accent) 18%, transparent), transparent 70%), rgba(5,6,11,.9); }
+#xm.on { display:flex; animation:xmIn .22s ease-out; } @keyframes xmIn { from { opacity:0; transform:scale(.97) } }
+#xm .card { width:940px; border-radius:50px; padding:40px 40px 34px; background:radial-gradient(700px 360px at 30% 0%, color-mix(in srgb, var(--ui-accent) 20%, transparent), transparent 75%), #0b0a14;
+  border:1.5px solid rgba(255,255,255,.14); box-shadow:0 40px 100px rgba(0,0,0,.7); }
 #xm .hd { display:flex; align-items:center; gap:30px; }
-#xm .hd img, #xm .hd .ph { width:190px; height:190px; border-radius:26px; object-fit:cover; background:rgba(255,255,255,.1); flex:none; display:flex; align-items:center; justify-content:center; font-size:90px; color:rgba(255,255,255,.3); }
-#xm .hd .t { font-size:46px; font-weight:800; line-height:1.1; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
-#xm .hd .a { margin-top:8px; font-size:32px; font-weight:600; color:rgba(255,255,255,.65); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+#xm .hd img, #xm .hd .ph { width:180px; height:180px; border-radius:30px; object-fit:cover; background:rgba(255,255,255,.08); flex:none; display:flex; align-items:center; justify-content:center; font-size:84px; color:rgba(255,255,255,.3);
+  box-shadow:0 20px 50px rgba(0,0,0,.55), 0 0 60px color-mix(in srgb, var(--ui-accent) 35%, transparent); }
 #xm .hd .x { min-width:0; flex:1; }
-#xm .row { margin-top:22px; border-radius:30px; border:3px solid transparent; padding:20px 26px; font-size:40px; font-weight:800; display:flex; align-items:center; gap:24px; background:rgba(255,255,255,.07); }
-#xm .row.on { background:rgba(255,255,255,.16); border-color:#fff; box-shadow:0 0 0 7px rgba(255,255,255,.14); }
-#xm .tr { justify-content:center; gap:34px; background:none; }
-#xm .tr .b { width:150px; height:150px; border-radius:50%; background:rgba(255,255,255,.12); border:3px solid rgba(255,255,255,.18); display:flex; align-items:center; justify-content:center; font-size:60px; }
-#xm .tr .b.big { width:180px; height:180px; font-size:76px; background:rgba(255,255,255,.2); }
-#xm .tr .b.on { background:#fff; color:#12101c; transform:scale(1.14); box-shadow:0 0 0 9px rgba(255,255,255,.25); }
-#xm .tr.on { border-color:transparent; box-shadow:none; background:none; }
-#xm .vol .bar { flex:1; height:16px; border-radius:8px; background:rgba(255,255,255,.2); overflow:hidden; } #xm .vol .bar i { display:block; height:100%; background:#fff; border-radius:8px; }
-#xm .vol b { width:80px; text-align:right; font-variant-numeric:tabular-nums; }
-#xm .leg { margin-top:26px; display:flex; justify-content:center; gap:34px; font-size:25px; font-weight:600; color:rgba(255,255,255,.55); }
-#xm .leg b { background:rgba(255,255,255,.16); color:#fff; border-radius:10px; padding:2px 14px; margin-right:8px; }`;
+#xm .hd .t { margin-top:10px; font-size:44px; font-weight:800; line-height:1.1; letter-spacing:-.5px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+#xm .hd .a { margin-top:8px; font-size:30px; font-weight:600; color:var(--np-accent-soft, #cfd6ff); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+#xm .tr { display:flex; justify-content:center; align-items:center; gap:40px; margin:34px 0 26px; }
+#xm .tr .b { width:120px; height:120px; border-radius:50%; background:rgba(255,255,255,.1); border:2px solid rgba(255,255,255,.18); display:flex; align-items:center; justify-content:center; color:#fff; transition:transform .15s, background .15s, box-shadow .15s; }
+#xm .tr .b svg { width:52px; height:52px; fill:currentColor; }
+#xm .tr .b.big { width:150px; height:150px; background:rgba(255,255,255,.18); } #xm .tr .b.big svg { width:68px; height:68px; }
+#xm .tr .b.on { background:#fff; color:#12101c; border-color:#fff; transform:scale(1.12); box-shadow:0 0 0 9px color-mix(in srgb, var(--ui-accent) 55%, transparent), 0 18px 44px rgba(0,0,0,.5); }
+#xm .om-list { margin-top:0; gap:14px; }
+#xm .om-row { padding:16px 28px 16px 16px; }
+#xm .om-row .ic { width:68px; height:68px; font-size:38px; border-radius:20px; }
+#xm .vol .bar { flex:1; height:14px; border-radius:7px; background:rgba(255,255,255,.16); overflow:hidden; }
+#xm .vol .bar i { display:block; height:100%; border-radius:7px; background:linear-gradient(90deg, var(--ui-accent), #fff); }
+#xm .vol b { width:70px; text-align:right; font-size:30px; font-weight:800; font-variant-numeric:tabular-nums; }
+#xm .om-legend { margin-top:28px; }`;
       document.head.appendChild(css);
       const el = document.createElement('div'); el.id = 'xm'; document.body.appendChild(el);
       let open = false, row = 0, col = 1, vol = null, volT = null, last = 0, n = null, rn = null;
@@ -46,15 +50,19 @@
       const esc = t => String(t == null ? '' : t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
       const sonos = (c, body) => fetch('/sonos/' + c, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body || {}) }).catch(() => {});
       const np = () => (window.mirrorNow && window.mirrorNow()) || {};
+      const ICO = {
+        prev: '<svg viewBox="0 0 24 24"><path d="M6 5h2.4v14H6zM20 5v14L9.6 12z"/></svg>', next: '<svg viewBox="0 0 24 24"><path d="M15.6 5H18v14h-2.4zM4 5l10.4 7L4 19z"/></svg>',
+        play: '<svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg>', pause: '<svg viewBox="0 0 24 24"><path d="M6 4.5h4v15H6zM14 4.5h4v15h-4z"/></svg>',
+        vol: '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 4V5L7 9zM15.5 8.5a5 5 0 0 1 0 7l-1.4-1.4a3 3 0 0 0 0-4.2zM18.4 5.6a9 9 0 0 1 0 12.8L17 17a7 7 0 0 0 0-10z"/></svg>' };
       function paint() {
         const p = np(), ok = p.ok && p.title, v = vol != null ? vol : (p.volume || 0), play = p.state === 'playing';
-        el.innerHTML = `<div class="card"><div class="hd">${ok && p.art ? `<img src="${esc(p.art)}" alt="">` : '<div class="ph">♪</div>'}<div class="x"><div class="t">${ok ? esc(p.title) : 'Nothing playing'}</div><div class="a">${ok ? esc(p.artist) : 'Sonos Era 300'}</div></div></div>
-          <div class="row tr${row === 0 ? ' on' : ''}"><div class="b${row === 0 && col === 0 ? ' on' : ''}">⏮</div><div class="b big${row === 0 && col === 1 ? ' on' : ''}">${play ? '⏸' : '▶'}</div><div class="b${row === 0 && col === 2 ? ' on' : ''}">⏭</div></div>
-          <div class="row vol${row === 1 ? ' on' : ''}">🔊<div class="bar"><i style="width:${v}%"></i></div><b>${v}</b></div>
-          <div class="row${row === 2 ? ' on' : ''}">🖼️ Screensaver</div>
-          <div class="row${row === 3 ? ' on' : ''}">😴 Deep sleep <span style="font-size:26px;font-weight:600;color:rgba(255,255,255,.55)">screen off · any button wakes it</span></div>
-          <div class="row${row === 4 ? ' on' : ''}">✕ Close</div>
-          <div class="leg"><span><b>▲▼</b>Move</span><span><b>◀▶</b>${row === 1 ? 'Volume' : 'Pick'}</span><span><b>A</b>Select</span><span><b>B</b>Close</span></div></div>`;
+        const r = (i, ic, t, d) => `<div class="om-row${row === i ? ' sel' : ''}"><div class="ic">${ic}</div><div class="tx"><div class="t">${t}</div>${d ? `<div class="d">${d}</div>` : ''}</div></div>`;
+        const h = `<div class="card"><div class="hd">${ok && p.art ? `<img src="${esc(p.art)}" alt="">` : '<div class="ph">♪</div>'}<div class="x"><div class="om-kicker">${ok ? (play ? 'Now playing' : 'Paused') : 'Music'}</div><div class="t">${ok ? esc(p.title) : 'Nothing playing'}</div><div class="a">${ok ? esc(p.artist) : 'Sonos Era 300'}</div></div></div>
+          <div class="tr"><div class="b${row === 0 && col === 0 ? ' on' : ''}">${ICO.prev}</div><div class="b big${row === 0 && col === 1 ? ' on' : ''}">${play ? ICO.pause : ICO.play}</div><div class="b${row === 0 && col === 2 ? ' on' : ''}">${ICO.next}</div></div>
+          <div class="om-list"><div class="om-row vol${row === 1 ? ' sel' : ''}"><div class="ic">${ICO.vol}</div><div class="bar"><i style="width:${v}%"></i></div><b>${v}</b></div>
+          ${r(2, '🖼️', 'Screensaver', 'Posters, scores and the music wall')}${r(3, '😴', 'Deep sleep', 'Screen off · any button wakes it')}${r(4, '↩', 'Back to the mirror', '')}</div>
+          <div class="om-legend"><span><b>▲▼</b>Move</span><span><b>◀▶</b>${row === 1 ? 'Volume' : 'Pick'}</span><span><b>A</b>Select</span><span><b>B</b>Close</span></div></div>`;
+        if (h !== el._h) { el.innerHTML = h; el._h = h; }   // (it repaints every second while open: rebuilding unchanged rows would restart the focus glow)
       }
       function show() { if (open) return; open = true; row = 0; col = 1; vol = null; last = performance.now(); el.classList.add('on'); paint(); }
       function hide() { open = false; el.classList.remove('on'); }

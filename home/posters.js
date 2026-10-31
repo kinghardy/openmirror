@@ -278,7 +278,7 @@
   function full(it, extra) {
     let bg = '';
     if (it.kind === 'espn') { const [a, h] = teamColors(it); bg = `<div class="bg" style="background:linear-gradient(135deg, ${esc(a)}, ${esc(h)})"></div>`; }
-    else if (it.back) bg = `<div class="bg back" style="background-image:url('${esc(it.back)}')"></div>`;
+    else if (it.back) bg = `<div class="bg back" style="--bg:url('${esc(it.back)}')"></div>`;
     else if (it.img) bg = `<div class="bg" style="background-image:url('${esc(it.img)}')"></div>`;
     return `<div class="pw-full">${bg || '<div class="bg"></div>'}<div class="pw-frame">${art(it)}${extra || ''}</div>`
       + `<div class="cap"><div class="t">${esc(it.title)}</div><div class="s">${esc(subOf(it))}</div>${it.blurb ? `<div class="w">${esc(it.blurb)}</div>` : ''}</div></div>`;

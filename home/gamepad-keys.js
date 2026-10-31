@@ -1,6 +1,5 @@
 (() => {
   const DEAD = 0.5, DELAY = 400, RATE = 120;
-  const status = document.getElementById('controller-status');
   const held = {};
   const keys = { up:'ArrowUp', down:'ArrowDown', left:'ArrowLeft', right:'ArrowRight', a:'Enter', b:'Escape' };
   const repeatable = new Set(['up','down','left','right']);
@@ -17,9 +16,10 @@
     const pads = [...navigator.getGamepads()].filter(p => p && p.connected);
     return pads.find(p => p.mapping === 'standard') || pads[0];
   }
+  let shown = null;
   function loop(t) {
     const p = pad();
-    if (status) status.style.display = p ? 'none' : 'block';
+    if (shown !== !p) { shown = !p; document.body.classList.toggle('no-pad', shown); }   // the home legend asks for the controller (only on a change, not every frame)
     if (p) for (const [name, test] of Object.entries(map)) {
       if (test(p)) {
         const h = held[name];

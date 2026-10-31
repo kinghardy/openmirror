@@ -1,5 +1,5 @@
 /* OpenMirror theme: Halloween (mirror). Restyles the home screen; the decorations come from theme.js. */
-:root { --om-orange:#ff7a18; --om-glow:rgba(255,122,24,.55); --om-violet:#9b5cff; }
+:root { --om-orange:#ff7a18; --om-glow:rgba(255,122,24,.55); --om-violet:#9b5cff; --ui-accent:#ff7a18; }   /* (--ui-accent colours Options, Settings and the Xbox menu) */
 body { background:#04010a !important; }
 .mirror-frame { background:
   radial-gradient(980px 640px at 50% 112%, rgba(255,110,10,.42), transparent 70%),
@@ -15,10 +15,10 @@ body { background:#04010a !important; }
 .channel-tile { background:rgba(46,14,82,.42) !important; border-color:rgba(255,122,24,.22) !important; }
 .channel-title { color:#fff1e2 !important; }
 .channel-subtitle { color:#b79bd6 !important; }
-.channel-tile.focused { background:rgba(255,122,24,.16) !important; border-color:var(--om-orange) !important; animation:omPulse 1.7s ease-in-out infinite !important; }
-@keyframes omPulse {
-  0%,100% { box-shadow:0 0 0 6px rgba(255,122,24,.34), 0 0 46px rgba(255,100,0,.38), 0 22px 50px rgba(0,0,0,.55); }
-  50% { box-shadow:0 0 0 12px rgba(255,122,24,.12), 0 0 76px rgba(255,100,0,.5), 0 22px 60px rgba(0,0,0,.55); } }
+/* static glow; the pulse is the home screen's inner glow (opacity only), tinted orange */
+.channel-tile.focused { background:rgba(255,122,24,.16) !important; border-color:var(--om-orange) !important; --focus-glow:rgba(255,122,24,.6);
+  box-shadow:0 0 0 6px rgba(255,122,24,.34), 0 0 56px rgba(255,100,0,.42), 0 22px 50px rgba(0,0,0,.55) !important; }
+.channel-tile.focused::before { animation-duration:1.7s; }
 .channel-tile.hero { border-color:rgba(255,122,24,.38) !important; background:#0d0616 !important; }
 .hero-kicker { color:var(--om-orange) !important; }
 .remote-legend { background:rgba(24,6,44,.7) !important; border:1px solid rgba(255,122,24,.2) !important; }

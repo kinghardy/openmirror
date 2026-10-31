@@ -6,30 +6,29 @@
   const api = (p, body) => fetch(p, body === undefined ? {} : { method: 'POST', headers: J, body: JSON.stringify(body) }).then(r => r.json());
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const css = document.createElement('style'); css.textContent = `
-#app-settings { background:#07080f !important; color:#f3f5fb; padding:60px 50px !important; }
-#app-settings h2 { font-size:46px; font-weight:800; margin:0 0 6px; } #app-settings .st-sub { font-size:24px; color:#8f96b3; margin-bottom:26px; letter-spacing:.04em; min-height:30px; }
-.st-row { display:flex; align-items:center; gap:24px; padding:26px 30px; margin-bottom:16px; border-radius:30px; background:rgba(255,255,255,.06); border:2px solid rgba(255,255,255,.1); }
-.st-row.sel { background:rgba(41,196,255,.14); border-color:#29c4ff; box-shadow:0 0 0 6px rgba(41,196,255,.18); }
-.st-row .ic { font-size:56px; width:70px; text-align:center; } .st-row .tx { flex:1; min-width:0; } .st-row .t { font-size:32px; font-weight:700; } .st-row .d { font-size:23px; color:#8f96b3; margin-top:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.st-row .r { font-size:24px; font-weight:700; color:#8f96b3; text-align:right; white-space:nowrap; } .st-row .r.ok { color:#4ade80; } .st-row .r.no { color:#ff6b6b; } .st-row .r.warn { color:#ffd04a; }
+/* rows, header and legend share home/menus.css with Options and the Xbox menu */
+#app-settings .om-sub { margin-bottom:30px; }
+.st-row { margin-bottom:16px; } .st-row .om-v { text-transform:none; letter-spacing:0; font-size:22px; max-width:360px; overflow:hidden; text-overflow:ellipsis; }
+#st-body .st-sub { font-size:24px; color:#8f96b3; padding:10px 6px; line-height:1.45; }
 .st-dot { width:22px; height:22px; border-radius:50%; background:#555; flex:none; } .st-dot.ok { background:#4ade80; box-shadow:0 0 14px #4ade80; } .st-dot.no { background:#ff6b6b; } .st-dot.warn { background:#ffd04a; }
-#st-body { max-height:1560px; overflow-y:auto; scrollbar-width:none; } .st-row.cmp { padding:14px 28px; margin-bottom:10px; border-radius:22px; gap:20px; } .st-row.cmp .t { font-size:27px; } .st-row.cmp .d { font-size:20px; margin-top:2px; }
-.st-leg { position:absolute; left:50px; right:50px; bottom:44px; display:flex; gap:34px; justify-content:center; font-size:24px; color:#8f96b3; } .st-leg b { color:#f3f5fb; background:rgba(255,255,255,.12); padding:3px 14px; border-radius:12px; margin-right:8px; }
+#st-body { max-height:1560px; overflow-y:auto; scrollbar-width:none; } .st-row.cmp { padding:14px 28px; margin-bottom:10px; border-radius:24px; gap:20px; } .st-row.cmp .t { font-size:27px; } .st-row.cmp .d { font-size:20px; margin-top:2px; }
+#st-body { padding:8px 10px; margin:-8px -10px; }
+.st-leg { position:absolute; left:50px; right:50px; bottom:44px; }
 .st-toast { position:absolute; left:50px; right:50px; bottom:110px; text-align:center; font-size:30px; font-weight:700; padding:20px; border-radius:24px; background:rgba(255,255,255,.12); opacity:0; transition:opacity .3s; } .st-toast.on { opacity:1; } .st-toast.bad { background:rgba(255,107,107,.25); } .st-toast.good { background:rgba(74,222,128,.22); }
-.st-kb { position:absolute; inset:0; background:rgba(4,5,12,.96); padding:60px 40px; display:none; flex-direction:column; } .st-kb.on { display:flex; }
-.st-kb .lab { font-size:30px; font-weight:700; } .st-kb .hint { font-size:22px; color:#8f96b3; margin:4px 0 20px; min-height:28px; } .st-kb .val { font-size:40px; font-family:'DejaVu Sans Mono',monospace; padding:24px 28px; border-radius:24px; background:rgba(255,255,255,.08); border:2px solid #29c4ff; min-height:96px; word-break:break-all; margin-bottom:26px; }
+.st-kb { position:absolute; inset:0; background:#05060b; padding:60px 40px; display:none; flex-direction:column; } .st-kb.on { display:flex; }
+.st-kb .lab { font-size:30px; font-weight:700; } .st-kb .hint { font-size:22px; color:#8f96b3; margin:4px 0 20px; min-height:28px; } .st-kb .val { font-size:40px; font-family:'DejaVu Sans Mono',monospace; padding:24px 28px; border-radius:24px; background:rgba(255,255,255,.08); border:2px solid var(--ui-accent); min-height:96px; word-break:break-all; margin-bottom:26px; }
 .st-kb .keys { display:grid; gap:10px; } .st-kb .kr { display:flex; gap:10px; } .st-kb .k { flex:1; height:96px; display:flex; align-items:center; justify-content:center; font-size:38px; font-weight:700; border-radius:20px; background:rgba(255,255,255,.08); border:2px solid transparent; min-width:0; }
-.st-kb .k.wide { flex:2; } .st-kb .k.sel { background:#29c4ff; color:#05212e; border-color:#fff; } .st-kb .k.act { background:rgba(74,222,128,.22); } .st-kb .k.sel.act { background:#4ade80; }`;
+.st-kb .k.wide { flex:2; } .st-kb .k.sel { background:var(--ui-accent); color:#05060b; border-color:#fff; } .st-kb .k.act { background:rgba(74,222,128,.22); } .st-kb .k.sel.act { background:#4ade80; }`;
   document.head.appendChild(css);
-  const ov = document.createElement('div'); ov.className = 'app-overlay'; ov.id = 'app-settings';
-  ov.innerHTML = '<h2>⚙️ Settings</h2><div class="st-sub" id="st-sub"></div><div id="st-body"></div><div class="st-toast" id="st-toast"></div><div class="st-leg" id="st-leg"></div><div class="st-kb" id="st-kb"></div>';
+  const ov = document.createElement('div'); ov.className = 'app-overlay om-page'; ov.id = 'app-settings';
+  ov.innerHTML = '<div class="om-kicker">Options</div><h1 class="om-h1">Settings</h1><div class="om-sub" id="st-sub"></div><div id="st-body"></div><div class="st-toast" id="st-toast"></div><div class="st-leg om-legend" id="st-leg"></div><div class="st-kb" id="st-kb"></div>';
   document.body.appendChild(ov);
   const $ = id => document.getElementById(id);
   let open = false, view = 'menu', backTo = null, sel = 0, items = [], data = {}, kb = null, toastT = null, confirmKey = null;
 
   const toast = (m, kind) => { const t = $('st-toast'); t.textContent = m; t.className = 'st-toast on ' + (kind || ''); clearTimeout(toastT); toastT = setTimeout(() => t.className = 'st-toast', 4200); };
   const legend = a => { $('st-leg').innerHTML = a.map(([k, t]) => `<span><b>${k}</b>${t}</span>`).join(''); };
-  const row = (i, ic, t, d, r, cls) => `<div class="st-row${i === sel ? ' sel' : ''}">${ic ? `<div class="ic">${ic}</div>` : ''}<div class="tx"><div class="t">${esc(t)}</div><div class="d">${esc(d)}</div></div><div class="r ${cls || ''}">${esc(r || '')}</div></div>`;
+  const row = (i, ic, t, d, r, cls) => `<div class="om-row st-row${i === sel ? ' sel' : ''}">${ic ? `<div class="ic">${ic}</div>` : ''}<div class="tx"><div class="t">${esc(t)}</div><div class="d">${esc(d)}</div></div>${r === '›' ? '<div class="go">›</div>' : r ? `<div class="om-v ${cls || ''}">${esc(r)}</div>` : ''}</div>`;
 
   // ---- screens ----
   function paint() {
@@ -68,7 +67,7 @@
       legend([['A', 'Show / hide'], ['X', 'Move up'], ['Y', 'Move down'], ['Start', 'Rename'], ['B', 'Back']]);
     } else if (view === 'status') {
       const c = data.checks || [];
-      b.innerHTML = c.length ? c.map(x => `<div class="st-row cmp"><div class="st-dot ${x.ok ? (x.warn ? 'warn' : 'ok') : 'no'}"></div><div class="tx"><div class="t">${esc(x.label)}</div><div class="d">${esc(x.detail)}</div></div></div>`).join('') : '<div class="st-sub">Loading…</div>';
+      b.innerHTML = c.length ? c.map(x => `<div class="om-row st-row cmp"><div class="st-dot ${x.ok ? (x.warn ? 'warn' : 'ok') : 'no'}"></div><div class="tx"><div class="t">${esc(x.label)}</div><div class="d">${esc(x.detail)}</div></div></div>`).join('') : '<div class="st-sub">Loading…</div>';
       items = []; legend([['X', 'Refresh'], ['B', 'Back']]);
     } else if (view === 'keys') {
       items = (data.settings || []).filter(s => s.ui && s.group !== 'home');
