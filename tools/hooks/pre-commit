@@ -1,0 +1,3 @@
+#!/bin/sh
+# Refuses a commit that contains a key, token or private key. Enable it once with:   git config core.hooksPath tools/hooks
+exec python3 "$(git rev-parse --show-toplevel)/tools/scan_secrets.py" --staged

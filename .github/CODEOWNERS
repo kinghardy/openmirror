@@ -1,0 +1,11 @@
+# Changes to security-sensitive code need a maintainer's review (owner: @kinghardy).
+/SECURITY.md            @kinghardy
+/docs/SECURITY_MODEL.md @kinghardy
+/mirror_settings.py     @kinghardy
+/mirror_pairing.py      @kinghardy
+/mirror_network.py      @kinghardy
+/mirror_channels.py     @kinghardy
+/mirror_themes.py       @kinghardy
+/mirror_tls.py          @kinghardy
+/mirror_push.py         @kinghardy
+/.github/               @kinghardy

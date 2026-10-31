@@ -1,0 +1,12 @@
+{
+ "id": "system",
+ "name": "Wii Options",
+ "subtitle": "Mirror Settings",
+ "order": 90,
+ "permissions": [
+  "controller",
+  "settings"
+ ],
+ "icon": "⚙️",
+ "required": true
+}

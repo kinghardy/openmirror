@@ -1,0 +1,11 @@
+{
+ "id": "agenda",
+ "name": "Daily Agenda",
+ "subtitle": "Calendar Events",
+ "order": 70,
+ "permissions": [
+  "controller"
+ ],
+ "icon": "📅",
+ "placeholder": true
+}

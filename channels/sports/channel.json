@@ -1,0 +1,12 @@
+{
+ "id": "sports",
+ "name": "Sports",
+ "subtitle": "Scores · Stats · Watch",
+ "order": 110,
+ "permissions": [
+  "controller",
+  "sports_data"
+ ],
+ "icon": "🏟️",
+ "subtitle_id": "sports-sub"
+}

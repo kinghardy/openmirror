@@ -1,0 +1,2 @@
+{"id": "halloween", "name": "Halloween", "description": "Orange and purple glow, cobwebs, bats, fog and the odd ghost. Turns itself on October 24 to 31.", "author": "OpenMirror", "license": "Apache-2.0",
+ "window": ["10-24", "10-31"], "css": "theme.css", "phone_css": "phone.css", "js": "theme.js"}

@@ -1,0 +1,11 @@
+{
+ "id": "lights",
+ "name": "Lights",
+ "subtitle": "Home Assistant",
+ "order": 20,
+ "permissions": [
+  "controller",
+  "home_assistant"
+ ],
+ "icon": "💡"
+}

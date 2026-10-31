@@ -1,0 +1,10 @@
+{
+ "id": "pool",
+ "name": "Billiards Rack",
+ "subtitle": "Rules & Scoreboard",
+ "order": 10,
+ "permissions": [
+  "controller"
+ ],
+ "icon": "🎱"
+}

@@ -1,0 +1,11 @@
+{
+ "id": "camera",
+ "name": "Security HUD",
+ "subtitle": "Ring / Cameras",
+ "order": 80,
+ "permissions": [
+  "controller"
+ ],
+ "icon": "📹",
+ "placeholder": true
+}

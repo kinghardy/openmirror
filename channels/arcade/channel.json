@@ -1,0 +1,11 @@
+{
+ "id": "arcade",
+ "name": "Retro Arcade",
+ "subtitle": "Games & Pinball",
+ "order": 50,
+ "permissions": [
+  "controller",
+  "launch_games"
+ ],
+ "icon": "🕹️"
+}

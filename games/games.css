@@ -1,0 +1,89 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&display=swap');
+/* Hardy Party Games: the hub and King Hardy Slots. Everything is laid out for the 1080 x 1920 portrait screen. */
+#app-party { padding:0; background:#07050f; overflow:hidden; color:#fff; }
+#pty-root { position:absolute; inset:0; font-family:'Cinzel', Georgia, serif; }
+.pty-hub { position:absolute; inset:0; background:radial-gradient(120% 70% at 50% 0%, #4a1560 0%, #170a2b 55%, #07050f 100%); }
+.pty-hub::before { content:""; position:absolute; inset:0; background:radial-gradient(2px 2px at 20% 30%, #ffe08a 50%, transparent 52%), radial-gradient(2px 2px at 70% 20%, #fff 50%, transparent 52%), radial-gradient(3px 3px at 85% 60%, #ffe08a 50%, transparent 52%), radial-gradient(2px 2px at 10% 75%, #fff 50%, transparent 52%), radial-gradient(2px 2px at 55% 85%, #ffe08a 50%, transparent 52%); opacity:.55; }
+.pty-head { position:absolute; left:0; right:0; top:90px; text-align:center; }
+.pty-head .k { font-size:34px; font-weight:700; letter-spacing:.5em; color:#c9a7ff; }
+.pty-head .t { margin-top:14px; font-size:118px; font-weight:900; line-height:1; letter-spacing:.02em; background:linear-gradient(180deg,#fff6c8,#ffd04a 45%,#c98a00); -webkit-background-clip:text; background-clip:text; color:transparent; filter:drop-shadow(0 6px 0 #4b2a00); }
+.pty-head .s { margin-top:18px; font-size:34px; font-weight:700; letter-spacing:.14em; color:#e8dcff; }
+.pty-list { position:absolute; left:60px; right:60px; top:520px; display:flex; flex-direction:column; gap:36px; }
+.pty-card { position:relative; display:flex; align-items:center; gap:44px; padding:44px 50px; border-radius:44px; background:linear-gradient(135deg,#2a1450,#150a2c); border:5px solid #4a2a7a; opacity:.7; transform:scale(.97); transition:all .2s; }
+.pty-card.on { opacity:1; transform:scale(1); border-color:#ffd04a; box-shadow:0 0 0 3px #ffd04a, 0 0 70px rgba(255,208,74,.4), inset 0 0 60px rgba(255,208,74,.12); }
+.pty-card .art { flex:none; width:230px; height:230px; display:flex; align-items:center; justify-content:center; }
+.pty-card.on .art { animation:ptyBob 1.4s ease-in-out infinite alternate; }
+@keyframes ptyBob { to { transform:translateY(-14px) rotate(-3deg); } }
+.pty-card .ct { font-size:70px; font-weight:900; line-height:1.02; color:#fff; }
+.pty-card .cs { margin-top:14px; font-size:32px; font-weight:700; color:#d9c6ff; line-height:1.3; font-family:-apple-system,'Segoe UI',Roboto,sans-serif; }
+.pty-card .cn { margin-top:16px; display:inline-block; font-size:26px; font-weight:800; padding:6px 20px; border-radius:20px; background:rgba(255,208,74,.18); color:#ffd04a; font-family:-apple-system,'Segoe UI',Roboto,sans-serif; letter-spacing:.06em; }
+.pty-card.soon { opacity:.4; border-style:dashed; padding:34px 50px; }
+.pty-card.soon .ct { font-size:48px; } .pty-card.soon .art { width:130px; height:130px; font-size:90px; }
+.pty-legend { position:absolute; left:50%; translate:-50% 0; bottom:36px; display:flex; gap:34px; padding:12px 30px; border-radius:40px; background:rgba(16,18,28,.94); border:1.5px solid rgba(255,255,255,.14); color:#cfd8e2; font:700 25px -apple-system,'Segoe UI',Roboto,sans-serif; white-space:nowrap; }
+.pty-legend span { display:inline-flex; align-items:center; gap:9px; }
+.pty-legend .pg-k { min-width:44px; height:44px; padding:0 10px; font-size:22px; border-radius:22px; }
+
+/* ---------- King Hardy Slots ---------- */
+.ks { position:absolute; inset:0; overflow:hidden; background:radial-gradient(110% 60% at 50% 18%, #6a1b6e 0%, #2c0c4a 45%, #0b0518 100%); font-family:'Cinzel', Georgia, serif; }
+.ks.fs { background:radial-gradient(110% 60% at 50% 18%, #8a5a00 0%, #4a2400 45%, #150a02 100%); }
+.ks-glow { position:absolute; left:50%; top:300px; width:1400px; height:1400px; margin-left:-700px; border-radius:50%; background:radial-gradient(circle, rgba(255,208,74,.16), transparent 62%); animation:ksBreath 5s ease-in-out infinite alternate; }
+@keyframes ksBreath { to { transform:scale(1.12); opacity:.7; } }
+.ks-castle { position:absolute; left:0; right:0; bottom:0; height:520px; opacity:.55; }
+.ks-title { position:absolute; left:0; right:0; top:26px; text-align:center; }
+.ks-title svg { width:170px; height:120px; filter:drop-shadow(0 8px 14px rgba(0,0,0,.5)); animation:ksCrown 3s ease-in-out infinite alternate; }
+@keyframes ksCrown { to { transform:translateY(-8px) rotate(2deg); } }
+.ks-title .t { margin-top:-6px; font-size:132px; font-weight:900; line-height:1; letter-spacing:.03em; background:linear-gradient(180deg,#fff6c8,#ffd04a 48%,#c98a00); -webkit-background-clip:text; background-clip:text; color:transparent; filter:drop-shadow(0 6px 0 #4b2a00); }
+.ks-title .s { margin-top:-4px; font-size:60px; font-weight:700; letter-spacing:.55em; color:#e8dcff; text-indent:.55em; }
+.ks-banner { position:absolute; left:0; right:0; top:358px; text-align:center; font-size:31px; font-weight:900; letter-spacing:.08em; white-space:nowrap; color:#ffd04a; text-shadow:0 3px 0 #3a2000; height:44px; }
+.ks-banner.fs { color:#fff; animation:ksPulse 1s ease-in-out infinite alternate; }
+@keyframes ksPulse { to { transform:scale(1.06); color:#ffd04a; } }
+.ks-cab { position:absolute; left:50px; top:410px; width:980px; height:622px; box-sizing:border-box; padding:18px; border-radius:34px; background:linear-gradient(145deg,#fff1a8,#e2a812 40%,#8a5a00 75%,#f2c94c); box-shadow:0 30px 70px rgba(0,0,0,.65), inset 0 0 0 4px rgba(255,255,255,.35); }
+.ks-bulbs { position:absolute; left:26px; right:26px; height:14px; background:radial-gradient(circle, #fff 0 4px, #ffef9a 5px, transparent 7px) 0 0/36px 14px repeat-x; animation:ksBulb .8s steps(2) infinite; }
+.ks-bulbs.a { top:2px; } .ks-bulbs.b { bottom:2px; animation-delay:-.4s; }
+@keyframes ksBulb { 50% { opacity:.35; } }
+.ks-reels { position:relative; width:100%; height:100%; display:grid; grid-template-columns:repeat(5,1fr); gap:8px; padding:8px; box-sizing:border-box; border-radius:22px; background:#12061f; box-shadow:inset 0 0 40px rgba(0,0,0,.9); }
+.ks-reel { position:relative; overflow:hidden; border-radius:14px; background:linear-gradient(180deg,#fff,#efe6d0 12%,#fff 50%,#efe6d0 88%,#fff); }
+.ks-reel::after { content:""; position:absolute; inset:0; pointer-events:none; background:linear-gradient(180deg,rgba(0,0,0,.45),transparent 22%,transparent 78%,rgba(0,0,0,.45)); }
+.ks-strip { position:absolute; left:0; right:0; top:0; will-change:transform; }
+.ks-cell { height:190px; display:flex; align-items:center; justify-content:center; }
+.ks-cell svg { width:158px; height:158px; filter:drop-shadow(0 6px 5px rgba(0,0,0,.35)); }
+.ks-cell.win svg { animation:ksWin .5s ease-in-out infinite alternate; }
+.ks-cell.win { background:radial-gradient(circle, rgba(255,208,74,.65), transparent 70%); }
+@keyframes ksWin { to { transform:scale(1.14) rotate(-2deg); filter:drop-shadow(0 0 18px #ffd04a); } }
+.ks-reel.moving .ks-cell svg { opacity:.78; }
+.ks-lines { position:absolute; inset:8px; pointer-events:none; z-index:5; }
+.ks-lines polyline { fill:none; stroke-width:9; stroke-linejoin:round; stroke-linecap:round; opacity:.9; filter:drop-shadow(0 0 6px currentColor); }
+.ks-win { position:absolute; left:0; right:0; top:1052px; text-align:center; }
+.ks-win .l { font-size:28px; font-weight:700; letter-spacing:.5em; color:#c9a7ff; text-indent:.5em; }
+.ks-win .n { font-size:128px; font-weight:900; line-height:1.05; color:#fff3b0; text-shadow:0 0 30px rgba(255,208,74,.6), 0 6px 0 #4b2a00; font-variant-numeric:tabular-nums; }
+.ks-win .m { height:40px; font-size:30px; font-weight:700; letter-spacing:.08em; color:#e8dcff; font-family:-apple-system,'Segoe UI',Roboto,sans-serif; }
+.ks-win.on .n { animation:ksCount .35s ease-in-out infinite alternate; }
+@keyframes ksCount { to { transform:scale(1.05); } }
+.ks-meters { position:absolute; left:50px; right:50px; top:1322px; display:grid; grid-template-columns:1fr 1.15fr 1fr; gap:20px; }
+.ks-m { height:130px; border-radius:26px; background:linear-gradient(180deg,#1b0a30,#0e0620); border:4px solid #8a5a00; box-shadow:inset 0 0 26px rgba(0,0,0,.8); text-align:center; padding-top:14px; box-sizing:border-box; }
+.ks-m .l { font-size:22px; font-weight:700; letter-spacing:.3em; color:#c9a7ff; text-indent:.3em; }
+.ks-m .v { margin-top:4px; font-size:60px; font-weight:900; color:#ffd04a; font-variant-numeric:tabular-nums; text-shadow:0 3px 0 #3a2000; }
+.ks-m.bet .v b { font-size:34px; color:#fff; margin:0 12px; }
+.ks-spin { position:absolute; left:50%; top:1490px; width:200px; height:200px; margin-left:-100px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-direction:column;
+  background:radial-gradient(circle at 35% 30%, #4cd964, #1a8f34 70%); border:8px solid #fff3b0; box-shadow:0 14px 0 #0b5a1d, 0 24px 50px rgba(0,0,0,.6), 0 0 50px rgba(76,217,100,.45); font-weight:900; color:#fff; }
+.ks-spin .w { font-size:50px; letter-spacing:.06em; text-shadow:0 3px 0 rgba(0,0,0,.4); } .ks-spin .k { margin-top:2px; font-size:24px; font-family:-apple-system,'Segoe UI',Roboto,sans-serif; opacity:.9; }
+.ks-spin.busy { background:radial-gradient(circle at 35% 30%, #ff9f43, #c25b00 70%); box-shadow:0 14px 0 #7a3a00, 0 24px 50px rgba(0,0,0,.6); }
+.ks-spin.pressed { transform:translateY(8px); box-shadow:0 6px 0 #0b5a1d, 0 12px 30px rgba(0,0,0,.6); }
+.ks-side { position:absolute; top:1530px; width:250px; height:120px; border-radius:60px; display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(255,255,255,.1); border:3px solid rgba(255,255,255,.22); font-size:34px; font-weight:900; letter-spacing:.08em; }
+.ks-side small { font:600 22px -apple-system,'Segoe UI',Roboto,sans-serif; letter-spacing:0; color:#d9c6ff; }
+.ks-side.l { left:70px; } .ks-side.r { right:70px; } .ks-side.on { background:#ffd04a; color:#2a1450; border-color:#fff3b0; } .ks-side.on small { color:#4a2a7a; }
+.ks-pay { position:absolute; left:50px; right:50px; top:1730px; height:96px; display:flex; align-items:center; justify-content:center; gap:26px; border-radius:48px; background:rgba(0,0,0,.45); border:2px solid rgba(255,208,74,.35); }
+.ks-pay svg { width:76px; height:76px; } .ks-pay .p { font:800 30px -apple-system,'Segoe UI',Roboto,sans-serif; color:#fff3b0; letter-spacing:.02em; } .ks-pay .p i { font-style:normal; color:#c9a7ff; font-weight:600; margin-right:6px; }
+.ks-legend { position:absolute; left:50%; translate:-50% 0; bottom:20px; display:flex; gap:26px; padding:10px 26px; border-radius:36px; background:rgba(16,18,28,.94); border:1.5px solid rgba(255,255,255,.14); color:#cfd8e2; font:700 22px -apple-system,'Segoe UI',Roboto,sans-serif; white-space:nowrap; }
+.ks-legend span { display:inline-flex; align-items:center; gap:8px; } .ks-legend .pg-k { min-width:40px; height:40px; padding:0 9px; font-size:20px; border-radius:20px; }
+.ks-big { position:absolute; inset:0; z-index:30; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; background:rgba(8,3,16,.78); text-align:center; opacity:0; pointer-events:none; transition:opacity .3s; }
+.ks-big.on { opacity:1; }
+.ks-big .e { font-size:56px; font-weight:900; letter-spacing:.16em; color:#fff; text-indent:.16em; white-space:nowrap; }
+.ks-big .t { font-size:190px; font-weight:900; line-height:1; background:linear-gradient(180deg,#fff6c8,#ffd04a 50%,#c98a00); -webkit-background-clip:text; background-clip:text; color:transparent; filter:drop-shadow(0 8px 0 #4b2a00); animation:ksCount .4s ease-in-out infinite alternate; }
+.ks-big .n { font-size:150px; font-weight:900; color:#fff3b0; text-shadow:0 0 40px rgba(255,208,74,.7); font-variant-numeric:tabular-nums; }
+.ks-big .s { font:700 34px -apple-system,'Segoe UI',Roboto,sans-serif; color:#d9c6ff; margin-top:10px; letter-spacing:.1em; }
+.ks-coins { position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:40; }
+.ks-coins i { position:absolute; top:-80px; width:46px; height:46px; border-radius:50%; background:radial-gradient(circle at 35% 30%, #fff6c8, #ffd04a 55%, #b87400); border:3px solid #8a5a00; box-shadow:0 4px 8px rgba(0,0,0,.4); animation:ksCoin linear forwards; }
+@keyframes ksCoin { to { transform:translateY(2100px) rotateY(1440deg); } }
+.ks-toast { position:absolute; left:50%; top:1040px; translate:-50% 0; z-index:20; padding:14px 40px; border-radius:40px; background:rgba(0,0,0,.8); border:2px solid #ffd04a; font:800 34px -apple-system,'Segoe UI',Roboto,sans-serif; color:#fff3b0; white-space:nowrap; animation:ksToast 2.2s ease forwards; }
+@keyframes ksToast { 0% { opacity:0; transform:translateY(14px); } 12%, 85% { opacity:1; transform:none; } 100% { opacity:0; } }

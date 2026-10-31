@@ -1,0 +1,12 @@
+{
+ "id": "weather",
+ "name": "Forecast",
+ "subtitle": "{location}",
+ "order": 40,
+ "permissions": [
+  "location",
+  "network:api.open-meteo.com"
+ ],
+ "icon": "🌤️",
+ "placeholder": true
+}

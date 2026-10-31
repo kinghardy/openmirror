@@ -1,0 +1,18 @@
+# editor / tool backups (the working copies live outside the repo)
+*.bak
+*.bak[0-9]*
+*.tmp
+
+# machine-specific state lives outside the repo (~/.config/mirror, ~/.local/share/mirror, ~/.cache/mirror); never commit secrets
+.env
+.env.*
+*.key
+*.pem
+*.token
+tls/
+*.log
+
+# generated
+__pycache__/
+*.pyc
+promo/shots/

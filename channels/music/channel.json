@@ -1,0 +1,13 @@
+{
+ "id": "music",
+ "name": "Now Playing",
+ "subtitle": "Music",
+ "order": 0,
+ "hero": true,
+ "required": true,
+ "permissions": [
+  "now_playing",
+  "speaker_control",
+  "controller"
+ ]
+}

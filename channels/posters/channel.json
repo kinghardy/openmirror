@@ -1,0 +1,13 @@
+{
+ "id": "posters",
+ "name": "Poster Wall",
+ "subtitle": "Movies · TV · Games · Art",
+ "order": 100,
+ "permissions": [
+  "controller",
+  "tmdb",
+  "sports_data",
+  "network:image.tmdb.org"
+ ],
+ "icon": "🎞️"
+}

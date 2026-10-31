@@ -1,0 +1,11 @@
+{
+ "id": "tv",
+ "name": "TV",
+ "subtitle": "Power & Source",
+ "order": 30,
+ "permissions": [
+  "controller"
+ ],
+ "icon": "📺",
+ "placeholder": true
+}

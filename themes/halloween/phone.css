@@ -1,0 +1,6 @@
+/* OpenMirror theme: Halloween (phone app). The app is built on CSS variables, so the palette is the theme. */
+:root { --bg:#0a0510; --card:#190f26; --card2:#2a1740; --tx:#fff1e2; --dim:#b79bd6; --ac:#ff7a18; --gold:#ffb347; --ok:#8be04a; }
+body::before { content:""; position:fixed; inset:0; z-index:-1; pointer-events:none; background:radial-gradient(700px 420px at 50% 108%, rgba(255,110,10,.3), transparent 70%), radial-gradient(520px 380px at 0% 0%, rgba(118,48,255,.28), transparent 70%); }
+.top { background:rgba(10,5,16,.82) !important; }
+#nav { background:rgba(18,8,30,.9) !important; border-top-color:#3a2150 !important; }
+.coins { border-color:#4a2a68 !important; }

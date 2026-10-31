@@ -1,0 +1,11 @@
+{
+ "id": "youtube",
+ "name": "Shorts",
+ "subtitle": "YouTube · Vertical videos",
+ "order": 60,
+ "permissions": [
+  "controller",
+  "launch_games"
+ ],
+ "icon_html": "<svg viewBox=\"0 0 92 66\" height=\"66\" style=\"display:block;margin:7px auto 0\"><rect width=\"92\" height=\"66\" rx=\"16\" fill=\"#ff0000\"/><path d=\"M37 19v28l24-14z\" fill=\"#fff\"/></svg>"
+}

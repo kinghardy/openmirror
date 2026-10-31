@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0b0a14">
+<link rel="manifest" href="/manifest.webmanifest"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Party">
+<title>Party Requests</title>
+<script>window.OM_PHONE = true;</script><script src="/themes/loader.js"></script>
+<style>
+:root { --bg:#0b0a14; --card:#171526; --card2:#201d36; --tx:#f4f2ff; --dim:#9a97b8; --ac:#ff5a8a; --gold:#ffd04a; --ok:#4ade80; }
+* { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html,body { margin:0; background:var(--bg); color:var(--tx); font:16px/1.35 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; }
+:root { --pad:max(16px,calc((100vw - 528px)/2)); }
+html,body { height:100%; overflow:hidden; overscroll-behavior:none; } body { margin:0; }
+#join { position:fixed; inset:0; overflow-y:auto; padding:0 var(--pad) 40px; }
+#app { position:fixed; inset:0; display:flex; flex-direction:column; }
+#main { flex:1; min-height:0; overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; padding:0 var(--pad) calc(150px + env(safe-area-inset-bottom)); }
+h1 { font-size:26px; margin:calc(26px + env(safe-area-inset-top)) 0 4px; } p.s { color:var(--dim); margin:0 0 20px; }
+input { width:100%; padding:15px 16px; border-radius:14px; border:1px solid #3a3658; background:var(--card); color:var(--tx); font-size:18px; margin-bottom:12px; outline:none; }
+input:focus { border-color:var(--ac); }
+input[type=checkbox] { width:22px; height:22px; margin:0; padding:0; flex:none; accent-color:var(--ac); }
+button { font:inherit; border:0; border-radius:14px; padding:14px 18px; background:var(--ac); color:#fff; font-weight:700; font-size:16px; cursor:pointer; }
+button.sm { padding:9px 14px; font-size:14px; border-radius:11px; white-space:nowrap; }
+button.alt { background:var(--card2); color:var(--tx); }
+button.gold { background:var(--gold); color:#3a2a00; }
+button:disabled { opacity:.4; }
+.top { flex:none; z-index:5; padding:calc(12px + env(safe-area-inset-top)) var(--pad) 10px; background:rgba(11,10,20,.82); -webkit-backdrop-filter:blur(18px); backdrop-filter:blur(18px); display:flex; align-items:center; gap:10px; }
+.top .nm { font-weight:800; font-size:18px; flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.coins { transition:transform .25s, color .25s; background:var(--card); border:1px solid #3a3658; border-radius:30px; padding:8px 16px; font-weight:800; color:var(--gold); font-size:18px; font-variant-numeric:tabular-nums; }
+.coins small { color:var(--dim); font-weight:600; font-size:12px; margin-left:6px; }
+#nav { position:fixed; left:0; right:0; bottom:0; z-index:12; display:flex; justify-content:center; background:rgba(16,14,30,.88); -webkit-backdrop-filter:blur(20px); backdrop-filter:blur(20px); border-top:1px solid #2a2745; padding-bottom:env(safe-area-inset-bottom); }
+#nav .in { display:flex; width:100%; max-width:560px; } #nav button { flex:1; background:none; color:var(--dim); border-radius:0; padding:9px 2px 8px; font-size:11px; font-weight:700; letter-spacing:.02em; display:flex; flex-direction:column; align-items:center; gap:2px; min-width:0; transition:color .2s; } #nav button i { font-style:normal; font-size:23px; line-height:1.1; filter:grayscale(1) opacity(.7); transition:transform .2s, filter .2s; } #nav button.on { color:var(--tx); } #nav button.on i { filter:none; transform:translateY(-1px) scale(1.1); }
+#mini { position:fixed; left:10px; right:10px; max-width:540px; margin:0 auto; bottom:calc(64px + env(safe-area-inset-bottom)); z-index:11; background:rgba(32,29,54,.94); -webkit-backdrop-filter:blur(16px); backdrop-filter:blur(16px); border:1px solid #3a3658; border-radius:18px; padding:8px 12px 10px 8px; display:flex; align-items:center; gap:11px; box-shadow:0 10px 30px rgba(0,0,0,.5); animation:up .25s ease-out; overflow:hidden; }
+#mini img { width:46px; height:46px; border-radius:10px; object-fit:cover; background:var(--card); flex:none; } #mini .x { flex:1; min-width:0; } #mini .t { font-weight:800; font-size:15px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } #mini .a { color:var(--dim); font-size:12.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } #mini .g { font-size:20px; width:28px; text-align:center; } #mini .mb { position:absolute; left:0; right:0; bottom:0; height:3px; background:#2a2745; } #mini .mb i { display:block; height:100%; background:var(--ac); }
+#fp { position:fixed; inset:0; z-index:25; background:rgba(0,0,0,.55); display:flex; align-items:flex-end; } .fpc { position:relative; width:100%; max-width:560px; margin:0 auto; height:94%; overflow-y:auto; border-radius:28px 28px 0 0; background:var(--card); padding:10px 22px calc(28px + env(safe-area-inset-bottom)); animation:up .28s ease-out; isolation:isolate; } .fpc::before { content:''; position:absolute; inset:0; z-index:-1; background:var(--art) center/cover; filter:blur(50px) saturate(1.4) brightness(.45); transform:scale(1.4); }
+.grab { width:44px; height:5px; border-radius:3px; background:#ffffff40; margin:2px auto 14px; } .fpc .big { width:100%; max-width:340px; aspect-ratio:1; border-radius:22px; object-fit:cover; display:block; margin:6px auto 20px; box-shadow:0 24px 60px rgba(0,0,0,.6); background:var(--card2); transition:transform .4s; } .fpc .big.pa { transform:scale(.9); } .fpc .t { font-size:25px; font-weight:800; } .fpc .a { color:#ffffffb0; font-size:17px; margin-bottom:10px; } .fpc .tm { display:flex; justify-content:space-between; color:#ffffffa0; font-size:12px; font-variant-numeric:tabular-nums; margin-top:5px; } .fpc .bar { height:6px; background:#ffffff30; }
+.fpc .st { color:#ffffffa0; } .fpc .item { background:#ffffff14; }
+@keyframes vin { from { opacity:0; transform:translateY(10px) } } .vin { animation:vin .26s ease-out; }
+.np { position:relative; isolation:isolate; overflow:hidden; background:var(--card); border-radius:24px; padding:16px; display:flex; gap:16px; align-items:center; margin-bottom:12px; box-shadow:0 12px 34px rgba(0,0,0,.4); } .np::before { content:''; position:absolute; inset:0; z-index:-1; background:var(--art) center/cover; filter:blur(34px) saturate(1.5) brightness(.5); transform:scale(1.5); }
+.np img { width:112px; height:112px; border-radius:16px; object-fit:cover; background:var(--card2); flex:none; box-shadow:0 8px 24px rgba(0,0,0,.5); }
+.np .t { font-weight:800; font-size:20px; line-height:1.2; } .np .a { color:var(--dim); } .np .k { color:var(--ac); font-size:12px; font-weight:800; letter-spacing:.14em; }
+.bar { height:5px; background:#ffffff2a; border-radius:3px; margin-top:8px; overflow:hidden; } .bar i { display:block; height:100%; background:var(--ac); }
+.row { display:flex; gap:10px; margin-bottom:12px; } .row button { flex:1; padding:14px 8px; font-size:15px; }
+.item { display:flex; align-items:center; gap:12px; background:var(--card); border-radius:18px; padding:10px; margin-bottom:8px; }
+.item img { width:60px; height:60px; border-radius:12px; object-fit:cover; background:var(--card2); flex:none; }
+.item .x { flex:1; min-width:0; } .item .t { font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .item .a { color:var(--dim); font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.item .n { width:22px; text-align:center; color:var(--dim); font-weight:800; } .item.cur { outline:2px solid var(--ac); } .item .pk { color:var(--gold); }
+.toast { position:fixed; left:50%; bottom:calc(140px + env(safe-area-inset-bottom)); transform:translate(-50%,30px); background:#fff; color:#111; padding:12px 20px; border-radius:30px; font-weight:700; opacity:0; transition:.25s; pointer-events:none; max-width:90%; text-align:center; z-index:10; }
+.toast.on { opacity:1; transform:translate(-50%,0); } .toast.err { background:#ff6b6b; color:#fff; }
+.empty { color:var(--dim); text-align:center; padding:30px 0; } .hint { color:var(--dim); font-size:13px; margin:4px 2px 14px; }
+.adm { background:var(--card); border-radius:18px; padding:14px; margin-bottom:12px; } .adm h3 { margin:0 0 10px; font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--dim); }
+.adm.fold { padding:0; overflow:hidden; } .adm.fold h3 { margin:0; padding:16px 16px; display:flex; align-items:center; gap:10px; cursor:pointer; user-select:none; font-size:14px; color:var(--tx); } .adm.fold h3::before { content:attr(data-i); font-size:20px; letter-spacing:0; } .adm.fold h3::after { content:'›'; margin-left:auto; font-size:22px; color:var(--dim); transition:transform .2s; letter-spacing:0; } .adm.fold.open h3::after { transform:rotate(90deg); } .adm.fold .ab { display:none; padding:2px 14px 14px; } .adm.fold.open .ab { display:block; }
+.tr { display:flex; gap:10px; } .tr button { flex:1; font-size:22px; padding:12px; } input[type=range] { width:100%; accent-color:var(--ac); height:36px; margin:0; padding:0; border:0; background:none; }
+.gl { display:flex; align-items:center; gap:8px; padding:8px 0; border-top:1px solid #2a2745; flex-wrap:wrap; } .gl:first-of-type { border-top:0; } .gl .nm2 { flex:1; min-width:110px; font-weight:700; } .gl .c { color:var(--gold); font-weight:800; font-variant-numeric:tabular-nums; }
+.dot { display:inline-block; width:9px; height:9px; border-radius:50%; background:#444; margin-right:7px; } .dot.on { background:var(--ok); }
+.qa { display:flex; gap:6px; } .qa button { padding:8px 11px; font-size:15px; }
+.rm { user-select:none; -webkit-user-select:none; touch-action:manipulation; }
+.dp { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; max-width:300px; margin:6px auto 14px; } .dp button { aspect-ratio:1; font-size:30px; background:var(--card2); } .dp .aa { background:var(--ok); color:#06220f; font-size:30px; font-weight:900; }
+.fb { display:flex; gap:10px; margin-bottom:10px; } .fb button { flex:1; padding:18px 6px; font-size:20px; } .fb .bb { background:#ef4444; } .fb .xb { background:#3b82f6; } .fb .yb { background:var(--gold); color:#3a2a00; }
+.msg { padding:9px 0; border-top:1px solid #2a2745; } .msg:first-child { border-top:0; } .msg b { color:var(--ac); } .msg.rp { border-left:3px solid var(--gold); padding-left:10px; } .msg small { color:var(--dim); display:block; font-size:12px; }
+.shelf { margin:4px 0 16px; } .shelf h4 { margin:0 0 10px 2px; font-size:20px; font-weight:800; } .row2 { display:flex; gap:12px; overflow-x:auto; padding:2px 2px 8px; scrollbar-width:none; } .row2::-webkit-scrollbar { display:none; }
+.cd2 { flex:0 0 150px; min-width:0; } .cd2 img { width:150px; height:150px; border-radius:18px; box-shadow:0 8px 20px rgba(0,0,0,.35); transition:transform .15s;} .cd2:active img { transform:scale(.96); } .cd2 img { object-fit:cover; background:var(--card2); display:block; } .cd2 .t { margin-top:6px; font-weight:700; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .cd2 .a { color:var(--dim); font-size:12.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.cd2.art img { border-radius:50%; } .cd2.art .t { text-align:center; } .cd2.art .a { text-align:center; } .cd2.in img { filter:grayscale(1) brightness(.55); }
+.ah { display:flex; gap:14px; align-items:center; margin-bottom:14px; } .ah img { width:92px; height:92px; border-radius:50%; object-fit:cover; background:var(--card2); } .ah .t { font-size:24px; font-weight:800; } .st { font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--dim); margin:14px 2px 8px; }
+#sheet { position:fixed; inset:0; z-index:26; background:rgba(0,0,0,.6); display:flex; align-items:flex-end; } .sh { width:100%; max-width:560px; margin:0 auto; background:var(--card); border-radius:26px 26px 0 0; padding:20px 18px calc(24px + env(safe-area-inset-bottom)); animation:up .22s ease-out; } @keyframes up { from { transform:translateY(40px); opacity:0 } }
+.sh img { width:100%; max-width:280px; display:block; margin:0 auto 14px; border-radius:18px; } .sh .t { font-size:22px; font-weight:800; text-align:center; } .sh .a { color:var(--dim); text-align:center; margin-bottom:14px; } .sh button { width:100%; margin-top:8px; }
+#sec { position:fixed; left:12px; right:12px; top:calc(8px + env(safe-area-inset-top)); max-width:536px; margin:0 auto; z-index:16; background:#12301f; border:1px solid #2f6b47; border-radius:16px; padding:12px 14px; display:flex; gap:12px; align-items:center; font-size:14px; line-height:1.35; }
+#inst { position:fixed; left:12px; right:12px; bottom:calc(76px + env(safe-area-inset-bottom)); max-width:536px; margin:0 auto; z-index:15; background:#2a2745; border:1px solid #4a4570; border-radius:18px; padding:14px 16px; display:flex; gap:12px; align-items:center; box-shadow:0 14px 40px rgba(0,0,0,.6); } #inst div { font-size:14px; line-height:1.35; } #inst b { font-size:15px; } #inst .hh { color:var(--ac); font-weight:800; }
+#sbox { position:sticky; top:0; z-index:4; background:var(--bg); margin:0 calc(-1 * var(--pad)) 6px; padding:6px var(--pad) 4px; } #sbox input { margin-bottom:6px; border-radius:30px; padding:14px 20px; }
+.gh { border-radius:24px; padding:18px 14px 14px; margin-bottom:12px; position:relative; overflow:hidden; background:linear-gradient(120deg,var(--c1) 0%,#14122a 50%,var(--c2) 100%); box-shadow:0 12px 34px rgba(0,0,0,.4); }
+.gh .sc { display:flex; align-items:center; justify-content:space-between; gap:6px; } .gh .tm2 { flex:1; text-align:center; min-width:0; } .gh .tm2 img { width:62px; height:62px; object-fit:contain; filter:drop-shadow(0 4px 8px rgba(0,0,0,.5)); } .gh .tm2 b { display:block; font-size:14px; letter-spacing:.06em; margin-top:2px; } .gh .n { font-size:46px; font-weight:900; font-variant-numeric:tabular-nums; line-height:1; margin-top:4px; } .gh .md { text-align:center; flex:0 0 92px; font-weight:800; font-size:13px; line-height:1.3; } .gh .md .lv { color:#ff6b6b; letter-spacing:.14em; font-size:12px; } .gh .md small { display:block; color:#ffffffa0; font-weight:600; font-size:11px; margin-top:4px; }
+.ls { width:100%; border-collapse:collapse; margin-top:14px; font-size:13px; font-variant-numeric:tabular-nums; } .ls td, .ls th { padding:5px 4px; text-align:center; } .ls th { color:#ffffff90; font-weight:600; } .ls td:first-child, .ls th:first-child { text-align:left; font-weight:800; } .ls td:last-child { font-weight:900; }
+.wp { height:7px; border-radius:4px; display:flex; overflow:hidden; margin-top:12px; background:#ffffff30; } .wp i { display:block; height:100%; transition:width .6s; }
+.gtabs { display:flex; gap:6px; margin:0 0 12px; } .gtabs button { flex:1; background:var(--card); color:var(--dim); padding:11px 4px; font-size:14px; border-radius:12px; } .gtabs button.on { background:var(--card2); color:var(--tx); box-shadow:inset 0 -3px 0 var(--ac); }
+.gchips { display:flex; gap:8px; overflow-x:auto; margin-bottom:12px; scrollbar-width:none; } .gchips::-webkit-scrollbar { display:none; } .gchips button { flex:0 0 auto; background:var(--card); color:var(--dim); padding:9px 14px; font-size:14px; border-radius:20px; } .gchips button.on { background:var(--ac); color:#fff; }
+.pl { padding:10px 0; border-top:1px solid #2a2745; display:flex; gap:10px; } .pl:first-child { border-top:0; } .pl .w { flex:0 0 58px; color:var(--dim); font-size:12px; font-weight:700; } .pl .x { flex:1; font-size:14px; line-height:1.35; } .pl .x small { color:var(--dim); display:block; margin-top:2px; font-variant-numeric:tabular-nums; }
+.sr { margin:11px 0; } .sr .l { display:flex; justify-content:space-between; font-size:14px; font-weight:700; font-variant-numeric:tabular-nums; } .sr .l span:nth-child(2) { color:var(--dim); font-weight:600; } .sr .b { display:flex; gap:3px; margin-top:5px; height:6px; } .sr .b i { display:block; border-radius:3px; height:100%; } .sr .b .a { margin-left:auto; }
+.pt { width:100%; border-collapse:collapse; font-size:13px; font-variant-numeric:tabular-nums; } .pt th { color:var(--dim); font-weight:600; text-align:right; padding:4px 3px; } .pt td { padding:7px 3px; text-align:right; border-top:1px solid #2a2745; } .pt td:first-child, .pt th:first-child { text-align:left; font-weight:700; }
+.hide { display:none !important; }
+</style></head><body>
+<div id="join" class="hide">
+  <h1>🎉 Party requests</h1><p class="s">Pick a name and a 4-digit PIN. Your coins and name come back anytime with the same ones.</p>
+  <input id="nm" placeholder="Your name" maxlength="16" autocomplete="off" autocapitalize="words">
+  <input id="pin" placeholder="4-digit PIN" inputmode="numeric" maxlength="4" pattern="[0-9]*" type="password" autocomplete="off">
+  <button id="go" style="width:100%">Join the party</button><p class="hint" id="jmsg"></p>
+</div>
+<div id="app" class="hide">
+  <div class="top"><div class="nm" id="me"></div><button class="alt" id="bell" style="padding:8px 12px;font-size:18px">🔔</button><div class="coins"><span id="coins">0</span> 🪙<small id="rate"></small></div></div>
+    <div id="main">
+  <div id="v1">
+    <div class="np" id="np"></div>
+    <div class="row"><button class="alt" id="vote"></button><button class="gold" id="skip"></button></div>
+    <div class="hint" id="vh"></div>
+    <div id="q"></div>
+  </div>
+  <div id="v2" class="hide">
+    <div id="vback" class="hide" style="margin-bottom:8px"><button class="alt sm" id="back">← Back</button></div>
+    <div id="sbox"><input id="sq" placeholder="🔍  Search songs, artists, albums" autocomplete="off" enterkeyhint="search"></div>
+    <div class="hint" id="rh"></div><div id="res"></div>
+  </div>
+  <div id="v6" class="hide"><div id="gm"><div class="empty">Loading the game…</div></div></div>
+  <div id="v5" class="hide">
+    <div class="adm hide" id="pcard" style="border:2px solid var(--ac)"><h3>🎤 Tonight's question</h3><div id="ptxt" style="font-size:20px;font-weight:800;margin-bottom:10px"></div>
+      <input id="ans" placeholder="Your answer" maxlength="140" autocomplete="off" style="margin-bottom:8px"><button id="ansgo" style="width:100%">Answer</button></div>
+    <div class="adm"><h3>Say something to the room</h3><input id="say" placeholder="Your message (shows on the big screen)" maxlength="140" autocomplete="off" style="margin-bottom:8px"><button id="saygo" class="alt" style="width:100%">Post</button></div>
+    <div class="adm"><h3>What people are saying</h3><div id="feed"></div></div>
+  </div>
+  <div id="v4" class="hide">
+    <div class="rm">
+      <div class="dp"><span></span><button data-k="up">▲</button><span></span><button data-k="left">◀</button><button data-k="a" class="aa">A</button><button data-k="right">▶</button><span></span><button data-k="down">▼</button><span></span></div>
+      <div class="fb"><button data-k="b" class="bb">B</button><button data-k="x" class="xb">X</button><button data-k="y" class="yb">Y</button></div>
+      <div class="fb"><button data-k="back" class="alt">⌫</button><button data-k="start" class="alt">☰ Menu</button><button data-k="xbox" class="alt">Xbox</button></div>
+      <div class="adm" style="margin-top:14px"><h3>Type into the music search</h3><div class="row" style="margin:0"><input id="txt" placeholder="Type here, then Send" style="margin:0" autocomplete="off"><button id="send" style="flex:0 0 auto">Send</button></div><div class="hint" style="margin:8px 0 0">Open music on the mirror (Y), then pick the search bar first.</div></div>
+    </div>
+  </div>
+  <div id="v3" class="hide">
+    <div class="adm fold open" data-f="Playback"><h3 data-i="▶️">Playback</h3><div class="ab"><div class="tr"><button class="alt" data-tr="prev">⏮</button><button data-tr="toggle">⏯</button><button class="alt" data-tr="next">⏭</button></div></div></div>
+    <div class="adm fold open" data-f="Volume"><h3 data-i="🔊">Volume <span id="vl"></span></h3><div class="ab"><input type="range" id="vol" min="0" max="100"></div></div>
+    <div class="adm fold" data-f="Party mode"><h3 data-i="🎉">Party mode</h3><div class="ab"><button id="pty" style="width:100%"></button></div></div>
+    <div class="adm fold" data-f="Queue"><h3 data-i="📋">Manage the queue</h3><div class="ab"><div id="aq"></div></div></div>
+    <div class="adm fold" data-f="Guests & coins"><h3 data-i="👥">Guests &amp; coins</h3><div class="ab"><div id="ag"></div></div></div>
+    <div class="adm fold" data-f="Screensaver"><h3 data-i="🖼">Screensaver</h3><div class="ab">
+      <div class="tr" style="margin-bottom:10px"><button class="alt" data-sv="prev">◀ Prev</button><button class="alt" data-sv="next">Next ▶</button></div>
+      <div class="tr"><button data-sv="on">Start</button><button class="alt" data-sv="off">Stop</button><button class="alt" data-sv="home">Home</button></div>
+      <div class="tr" style="margin-top:10px"><button class="alt" data-sl="1">😴 Deep sleep</button><button class="alt" data-sl="0">☀️ Wake</button></div></div></div>
+    <div class="adm fold" data-f="Ask the room"><h3 data-i="🎤">Ask the room a question</h3><div class="ab"><input id="pq" placeholder="e.g. What song gets you on the dance floor?" maxlength="120" autocomplete="off" style="margin-bottom:8px"><div class="tr"><button id="pask">Ask</button><button class="alt" id="pclr">Clear</button></div><h3 style="margin-top:14px">Messages (tap ✕ to remove)</h3><div id="am"></div><button class="alt" id="mclr" style="width:100%;margin-top:8px">Clear the whole wall</button></div></div>
+    <div class="adm fold" data-f="Sports"><h3 data-i="🏈">Sports</h3><div class="ab"><div id="spg"></div>
+      <div style="margin-top:10px;font-size:14px;color:var(--dim)">TV delay: <b id="spd" style="color:var(--tx)"></b> s behind real time</div><input type="range" id="spr" min="0" max="120" style="margin:0"><div class="tr" style="margin-top:8px"><button class="alt" data-sp="sync">📺 I just saw it on TV</button><button class="alt" data-sp="auto">Detroit auto-watch</button></div>
+      <div class="tr" style="margin-top:8px"><button class="alt" data-sp="test:big">🏈 Test big</button><button class="alt" data-sp="test:med">Test banner</button><button class="alt" data-sp="test:small">Test pill</button></div></div></div>
+    <div class="adm fold" data-f="System health"><h3 data-i="🩺">System health</h3><div class="ab"><div id="hl"></div><div class="tr" style="margin-top:10px"><button class="alt" data-h="backup">Back up now</button><button class="alt" data-h="restart">Restart server</button></div></div></div>
+    <div class="adm fold" data-f="Secure app"><h3 data-i="🔒">Secure app (notifications)</h3><div class="ab"><div style="font-size:14px;color:var(--dim);line-height:1.4">On each family phone, open <a href="/trust" style="color:var(--ac)">party.local/trust</a> once and follow the steps. After that the secure address works with a padlock.</div></div></div>
+  </div>
+  </div>
+</div>
+<div id="mini" class="hide"><img id="mi" alt=""><div class="x"><div class="t" id="mt"></div><div class="a" id="ma"></div></div><div class="g" id="mg"></div><div class="mb"><i class="pb" id="mp"></i></div></div>
+<nav id="nav" class="hide"><div class="in"><button id="t1" class="on"><i>🎵</i>Queue</button><button id="t2"><i>🔍</i>Discover</button><button id="t5"><i>💬</i>Say</button><button id="t6" class="hide"><i>🏆</i>Game</button><button id="t3" class="hide"><i>⚙️</i>Admin</button><button id="t4" class="hide"><i>🎮</i>Remote</button></div></nav>
+<div id="fp" class="hide"><div class="fpc" id="fpc"></div></div>
+<div id="sheet" class="hide"><div class="sh" id="shx"></div></div>
+<div id="sec" class="hide"><div><b>🔒 Secure version ready</b><div>This phone trusts the secure address: switch for notifications and a real app.</div></div><a class="sm" href="https://party.local/" style="background:var(--ac);color:#fff;border-radius:11px;padding:9px 14px;font-weight:700;text-decoration:none;white-space:nowrap">Switch</a></div>
+<div id="inst" class="hide"><div><b>Install the Party app</b><div id="insth"></div></div><button class="sm alt" id="instx">Not now</button></div>
+<div id="off" class="hide" style="position:fixed;left:0;right:0;top:0;z-index:30;background:#7a1f2b;color:#fff;text-align:center;padding:calc(8px + env(safe-area-inset-top)) 12px 8px;font-weight:700;font-size:14px">📡 Can't reach the mirror — retrying…</div>
+<div class="toast" id="toast"></div>
+<script>
+const $ = id => document.getElementById(id), esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+let tok = localStorage.getItem('pt') || '', S = null, tT = null;
+function toast(m, err) { const t = $('toast'); t.textContent = m; t.className = 'toast on' + (err ? ' err' : ''); clearTimeout(tT); tT = setTimeout(() => t.className = 'toast', 2600); }
+async function api(path, body) {
+  const r = await fetch(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.assign({ token: tok }, body || {})) });
+  const j = await r.json().catch(() => ({})); if (r.status === 401) { signOut(); throw new Error('Signed out'); } if (!r.ok) throw new Error(j.error || 'Something went wrong'); return j;
+}
+function signOut() { $('nav').classList.add('hide'); $('mini').classList.add('hide'); tok = ''; localStorage.removeItem('pt'); $('app').classList.add('hide'); $('join').classList.remove('hide'); }
+$('go').onclick = async () => {
+  $('go').disabled = true; $('jmsg').textContent = '';
+  try { const j = await api('/api/join', { name: $('nm').value, pin: $('pin').value }); tok = j.token; localStorage.setItem('pt', tok); localStorage.setItem('pn', $('nm').value); start(); }
+  catch (e) { $('jmsg').textContent = e.message; } $('go').disabled = false;
+};
+$('nm').value = localStorage.getItem('pn') || '';
+let curTab = 1;
+function tab(n) {
+  curTab = n; [1, 2, 3, 4, 5, 6].forEach(i => { $('t' + i).classList.toggle('on', n === i); $('v' + i).classList.toggle('hide', n !== i); });
+  const v = $('v' + n); v.classList.remove('vin'); void v.offsetWidth; v.classList.add('vin'); $('main').scrollTop = 0; paintMini(); if (n === 2) loadDiscover(); if (n === 6) loadGame();
+}
+$('t1').onclick = () => tab(1); $('t2').onclick = () => tab(2); $('t3').onclick = () => tab(3); $('t4').onclick = () => tab(4); $('t5').onclick = () => tab(5); $('t6').onclick = () => tab(6);
+const fmt = s => s ? Math.floor(s / 60) + ':' + String(Math.floor(s) % 60).padStart(2, '0') : '';
+function paint() {
+  if (!S) return; const E = S.econ;
+  $('me').textContent = S.name; setCoins(S.coins); $('rate').textContent = '+' + E.rate + '/min';
+  const n = S.now;
+  $('np').style.setProperty('--art', n ? `url("${String(n.art).replace(/"/g, '%22')}")` : 'none');
+  $('np').innerHTML = n ? `<img src="${esc(n.art)}" alt=""><div style="min-width:0;flex:1"><div class="k">${n.state === 'playing' ? 'NOW PLAYING' : 'PAUSED'}</div><div class="t">${esc(n.title)}</div><div class="a">${esc(n.artist)}</div><div class="bar"><i class="pb"></i></div><div class="tm" style="display:flex;justify-content:space-between;font-size:12px;color:#ffffffa0;margin-top:4px;font-variant-numeric:tabular-nums"><span class="el"></span><span class="du"></span></div></div>` : '<div class="a">Nothing playing</div>';
+  paintMini(); if (!$('fp').classList.contains('hide')) paintFp(); tick(); lockSet();
+  const v = S.votes;
+  $('vote').textContent = v.mine ? `Voted ✓ (${v.have}/${v.need})` : `Vote skip · ${E.voteskip} 🪙 (${v.have}/${v.need})`; $('vote').disabled = v.mine || !n;
+  $('skip').textContent = S.admin ? 'Skip now · free' : `Skip now · ${E.skipnow} 🪙`; $('skip').disabled = !n;
+  $('vh').textContent = S.open ? (S.party ? `${S.here_n} here${S.admin && S.here.length ? ' · ' + S.here.join(', ') : ''}` : 'Party mode is off, so requests are paused') : 'Requests are closed right now';
+  paintSay(); paintWatch();
+  $('t3').classList.toggle('hide', !S.admin); $('t4').classList.toggle('hide', !S.admin); if (!S.admin && (!$('v3').classList.contains('hide') || !$('v4').classList.contains('hide'))) tab(1); if (S.admin) paintAdmin();
+  const next = S.queue.filter(i => i.n > S.current);
+  $('q').innerHTML = next.length ? next.map((i, k) => `<div class="item"><div class="n">${k + 1}</div><img src="${esc(i.art)}" alt=""><div class="x"><div class="t">${esc(i.title)}</div><div class="a">${esc(i.artist)} · ${i.by === 'Our Pick' ? '<span class="pk">★ Our Pick</span>' : esc(i.by || '')}</div></div>${k > 0 ? `<button class="sm alt" data-bump="${i.n}">Bump · ${E.bump}</button>` : ''}</div>`).join('') : '<div class="empty">Nothing queued yet. Request something!</div>';
+  $('rh').textContent = S.admin ? 'Requests are free for you' : `A request costs ${E.request} 🪙 · up to ${E.max_queued} queued at a time`;
+}
+// ---- Game tab: the game the admin is watching (scores are held back by the same TV delay as the mirror) ----
+let GM = null, gKey = null, gTab = 'sum', gBusy = false;
+function paintWatch() {
+  const w = (S && S.watch) || []; $('t6').classList.toggle('hide', !w.length);
+  if (!w.length && curTab === 6) tab(1);
+  if (w.length && curTab === 6) { if (!gKey || !w.some(x => x.key === gKey)) { gKey = w[0].key; GM = null; } paintGame(); }
+}
+async function loadGame() {
+  const w = (S && S.watch) || []; if (!w.length) return; if (!gKey || !w.some(x => x.key === gKey)) { gKey = w[0].key; GM = null; }
+  if (gBusy) return; gBusy = true; const k = gKey;
+  try { const d = await api('/api/game', { key: k }); if (k === gKey) { GM = d; paintGame(); } } catch (e) { if (!GM) $('gm').innerHTML = '<div class="empty">Couldn\'t load the game yet</div>'; }
+  gBusy = false;
+}
+setInterval(() => { if (curTab === 6 && !document.hidden) loadGame(); }, 8000);
+const gnum = v => { const n = parseFloat(String(v).replace(/[^0-9.\-]/g, '')); return isNaN(n) ? 0 : n; };
+function paintGame() {
+  const w = (S && S.watch) || []; if (!w.length) return;
+  const chips = w.length > 1 ? `<div class="gchips">${w.map(x => `<button data-gk="${esc(x.key)}" class="${x.key === gKey ? 'on' : ''}">${esc(x.away.abbr)} @ ${esc(x.home.abbr)}</button>`).join('')}</div>` : '';
+  if (!GM || GM.game.key !== gKey) { $('gm').innerHTML = chips + '<div class="empty">Loading the game…</div>'; return; }
+  const d = GM, G = d.game, A = G.away, H = G.home, live = G.state === 'in';
+  const hx = c => [1, 3, 5].map(i => parseInt(String(c).slice(i, i + 2), 16) || 0), near = hx(A.color).reduce((s, v, i) => s + Math.abs(v - hx(H.color)[i]), 0) < 120, HC = near ? H.alt : H.color;
+  const mid = G.state === 'pre' ? `<div class="md">${G.start ? new Date(G.start).toLocaleString([], { weekday: 'short', hour: 'numeric', minute: '2-digit' }) : 'Upcoming'}</div>` : `<div class="md">${live ? '<div class="lv">● LIVE</div>' : ''}${esc(G.detail || '')}${d.held ? '<small>in step with your TV</small>' : ''}</div>`;
+  const sc = G.state === 'pre' ? ['', ''] : [A.score, H.score];
+  const n = Math.max((A.lines || []).length, (H.lines || []).length);
+  const ls = n ? `<table class="ls"><tr><th></th>${Array.from({ length: n }, (_, i) => `<th>${i + 1}</th>`).join('')}<th>T</th></tr>${[A, H].map(t => `<tr><td>${esc(t.abbr)}</td>${Array.from({ length: n }, (_, i) => `<td>${esc((t.lines || [])[i] == null ? '' : t.lines[i])}</td>`).join('')}<td>${esc(t.score == null ? '' : t.score)}</td></tr>`).join('')}</table>` : '';
+  const wp = d.wp != null && live ? `<div class="wp"><i style="width:${100 - d.wp}%;background:${esc(A.color)}"></i><i style="width:${d.wp}%;background:${esc(HC)}"></i></div>` : '';
+  const side = t => `<div class="tm2"><img src="${esc(t.logo)}" alt=""><b>${esc(t.abbr)}</b><div class="n">${esc(sc[t === A ? 0 : 1])}</div></div>`;
+  let body = '';
+  if (gTab === 'sum') {
+    body = (d.leaders || []).map(l => `<div class="adm"><h3>${esc(l.team)} leaders</h3>${(l.rows || []).map(x => `<div class="gl" style="flex-wrap:nowrap"><div class="nm2" style="min-width:0"><span style="color:var(--dim);font-weight:600;font-size:12px;display:block">${esc(x.cat)}</span>${esc(x.who)}</div><div class="c" style="color:var(--tx)">${esc(x.val)}</div></div>`).join('')}</div>`).join('')
+      + ((d.plays || []).length ? `<div class="adm"><h3>Latest scoring</h3>${d.plays.slice(-3).reverse().map(playRow).join('')}</div>` : '') + (d.venue ? `<div class="hint">📍 ${esc(d.venue)}</div>` : '');
+  } else if (gTab === 'plays') body = (d.plays || []).length ? `<div class="adm" style="padding:6px 14px">${d.plays.slice().reverse().map(playRow).join('')}</div>` : '<div class="empty">No scoring plays yet</div>';
+  else if (gTab === 'stats') body = (d.stats || []).length ? `<div class="adm"><div class="l" style="display:flex;justify-content:space-between;font-weight:800;margin-bottom:6px"><span>${esc(A.abbr)}</span><span>${esc(H.abbr)}</span></div>${d.stats.map(x => { const a = gnum(x.away), h = gnum(x.home), t = (a + h) || 1; return `<div class="sr"><div class="l"><span>${esc(x.away)}</span><span>${esc(x.label)}</span><span style="color:var(--tx)">${esc(x.home)}</span></div><div class="b"><i style="width:${a / t * 50}%;background:${esc(A.color)}"></i><i class="a" style="width:${h / t * 50}%;background:${esc(HC)}"></i></div></div>`; }).join('')}</div>` : '<div class="empty">Stats show up once the game starts</div>';
+  else body = (d.players || []).length ? d.players.map(p => `<div class="adm"><h3>${esc(p.team)} · ${esc(p.cat)}</h3><table class="pt"><tr><th></th>${(p.labels || []).map(l => `<th>${esc(l)}</th>`).join('')}</tr>${p.rows.map(x => `<tr><td>${esc(x.name)}</td>${String(x.line).split(/ · | /).map(c => `<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</table></div>`).join('') : '<div class="empty">Player stats show up once the game starts</div>';
+  const keep = $('main').scrollTop;
+  $('gm').innerHTML = chips + `<div class="gh" style="--c1:${esc(A.color)}88;--c2:${esc(HC)}88"><div class="sc">${side(A)}${mid}${side(H)}</div>${ls}${wp}</div>
+    <div class="gtabs">${[['sum', 'Summary'], ['plays', 'Plays'], ['stats', 'Stats'], ['pl', 'Players']].map(([k, l]) => `<button data-gt="${k}" class="${gTab === k ? 'on' : ''}">${l}</button>`).join('')}</div>${body}`;
+  $('main').scrollTop = keep;
+}
+const playRow = p => `<div class="pl"><div class="w">${esc(p.team)}<br>${esc(p.period)} ${esc(p.clock)}</div><div class="x">${esc(p.text)}<small>${esc(p.away)}–${esc(p.home)}</small></div></div>`;
+$('v6').onclick = e => { const k = e.target.closest('[data-gk]'), t = e.target.closest('[data-gt]'); if (k) { gKey = k.dataset.gk; GM = null; paintGame(); loadGame(); } if (t) { gTab = t.dataset.gt; paintGame(); } };
+// ---- lock screen: a silent track makes the phone show a Now Playing card, which we fill with what the speaker is playing ----
+let lockOn = false, lockAu = null, lockKey = '';
+try { lockOn = localStorage.getItem('lock') === '1'; } catch (e) {}
+function silentUrl() {
+  const n = 8000, b = new DataView(new ArrayBuffer(44 + n)), w = (o, s) => [...s].forEach((c, i) => b.setUint8(o + i, c.charCodeAt(0)));
+  w(0, 'RIFF'); b.setUint32(4, 36 + n, true); w(8, 'WAVEfmt '); b.setUint32(16, 16, true); b.setUint16(20, 1, true); b.setUint16(22, 1, true); b.setUint32(24, 8000, true); b.setUint32(28, 8000, true); b.setUint16(32, 1, true); b.setUint16(34, 8, true); w(36, 'data'); b.setUint32(40, n, true);
+  for (let i = 0; i < n; i++) b.setUint8(44 + i, 128);
+  return URL.createObjectURL(new Blob([b], { type: 'audio/wav' }));
+}
+async function lockStart() {
+  if (!lockOn || !('mediaSession' in navigator)) return;
+  try { if (!lockAu) { lockAu = new Audio(silentUrl()); lockAu.loop = true; lockAu.setAttribute('playsinline', ''); } if (lockAu.paused) await lockAu.play(); lockActions(); lockSet(true); } catch (e) { /* needs a tap first: the next touch retries */ }
+}
+function lockStop() { try { lockAu && lockAu.pause(); } catch (e) {} lockKey = ''; if ('mediaSession' in navigator) { navigator.mediaSession.metadata = null; navigator.mediaSession.playbackState = 'none'; } }
+function lockActions() {
+  const ms = navigator.mediaSession, on = (a, f) => { try { ms.setActionHandler(a, f); } catch (e) {} };
+  const go = cmd => () => { if (S && S.admin) adm('transport', { cmd }); };
+  on('play', go('toggle')); on('pause', go('toggle')); on('nexttrack', go('next')); on('previoustrack', go('prev'));
+}
+function lockSet(force) {
+  if (!lockOn || !lockAu || lockAu.paused || !('mediaSession' in navigator) || !S || !S.now) return; const n = S.now, k = n.title + '|' + n.artist + '|' + n.state;
+  if (force || k !== lockKey) { lockKey = k; navigator.mediaSession.metadata = new MediaMetadata({ title: n.title, artist: n.artist, album: 'Party', artwork: n.art ? [{ src: n.art, sizes: '512x512' }] : [] }); navigator.mediaSession.playbackState = n.state === 'playing' ? 'playing' : 'paused'; }
+  try { if (n.dur) navigator.mediaSession.setPositionState({ duration: n.dur, position: Math.min(n.dur, curPos()), playbackRate: n.state === 'playing' ? 1 : 0 }); } catch (e) {}
+}
+document.addEventListener('pointerdown', () => { if (lockOn && (!lockAu || lockAu.paused)) lockStart(); }, true);
+// ---- live progress, mini player, full-screen player, coin counter ----
+const curPos = () => { const n = S && S.now; return n ? Math.min(n.dur || 1e9, (n.pos || 0) + (n.state === 'playing' ? (Date.now() - S.at) / 1000 : 0)) : 0; };
+function tick() {
+  const n = S && S.now; if (!n) return; const p = curPos(), w = n.dur ? Math.min(100, p / n.dur * 100) + '%' : '0%';
+  document.querySelectorAll('.pb').forEach(e => { e.style.width = w; }); document.querySelectorAll('.el').forEach(e => { e.textContent = fmt(p) || '0:00'; }); document.querySelectorAll('.du').forEach(e => { e.textContent = fmt(n.dur); });
+}
+setInterval(tick, 1000);
+function paintMini() {
+  const n = S && S.now, show = n && curTab !== 1 && curTab !== 4 && $('fp').classList.contains('hide'); $('mini').classList.toggle('hide', !show); if (!show) return;
+  if ($('mi').getAttribute('src') !== n.art) $('mi').src = n.art; $('mt').textContent = n.title; $('ma').textContent = n.artist; $('mg').textContent = n.state === 'playing' ? '🔊' : '⏸'; tick();
+}
+function openFp() { if (!S || !S.now) return; $('fp').classList.remove('hide'); paintFp(); paintMini(); }
+function closeFp() { $('fp').classList.add('hide'); paintMini(); }
+function paintFp() {
+  const n = S.now, E = S.econ; if (!n) return closeFp(); const v = S.votes, next = S.queue.filter(i => i.n > S.current).slice(0, 3);
+  $('fpc').style.setProperty('--art', `url("${String(n.art).replace(/"/g, '%22')}")`);
+  $('fpc').innerHTML = `<div class="grab"></div><img class="big${n.state === 'playing' ? '' : ' pa'}" src="${esc(n.art)}" alt="">
+    <div class="t">${esc(n.title)}</div><div class="a">${esc(n.artist)}</div><div class="bar"><i class="pb"></i></div><div class="tm"><span class="el"></span><span class="du"></span></div>
+    <div class="row" style="margin:18px 0 6px"><button class="alt" data-fa="vote" ${v.mine ? 'disabled' : ''}>${v.mine ? `Voted ✓ (${v.have}/${v.need})` : `Vote skip · ${E.voteskip} 🪙 (${v.have}/${v.need})`}</button><button class="gold" data-fa="skip">${S.admin ? 'Skip now · free' : `Skip now · ${E.skipnow} 🪙`}</button></div>
+    ${next.length ? '<div class="st">Up next</div>' + next.map(i => `<div class="item"><img src="${esc(i.art)}" alt=""><div class="x"><div class="t" style="font-size:16px">${esc(i.title)}</div><div class="a" style="font-size:13px;margin:0">${esc(i.artist)} · ${i.by === 'Our Pick' ? '★ Our Pick' : esc(i.by || '')}</div></div></div>`).join('') : ''}
+    <button class="alt" data-fa="close" style="width:100%;margin-top:14px">Close</button>`; tick();
+}
+$('fp').onclick = e => { const b = e.target.closest('button'); if (e.target === $('fp') || (b && b.dataset.fa === 'close')) return closeFp(); if (b && b.dataset.fa === 'vote') act('voteskip'); if (b && b.dataset.fa === 'skip') $('skip').click(); };
+$('mini').onclick = openFp; $('np').onclick = openFp;
+let coinShown = null, coinT = null;
+function setCoins(v) {
+  const el = $('coins'); if (coinShown === null || coinShown === v) { coinShown = v; el.textContent = v.toLocaleString(); return; }
+  const from = coinShown, up = v > from, t0 = performance.now(); coinShown = v; clearInterval(coinT);
+  const box = el.parentElement; box.style.transform = 'scale(1.12)'; box.style.color = up ? 'var(--ok)' : 'var(--ac)'; setTimeout(() => { box.style.transform = ''; box.style.color = ''; }, 450);
+  coinT = setInterval(() => { const k = Math.min(1, (performance.now() - t0) / 500); el.textContent = Math.round(from + (v - from) * (1 - Math.pow(1 - k, 3))).toLocaleString(); if (k >= 1) clearInterval(coinT); }, 30);
+}
+// pull a sheet or the player down to close it
+function swipeClose(wrap, box, close) {
+  let y0 = null, dy = 0;
+  wrap.addEventListener('touchstart', e => { if (box.scrollTop > 0 || e.target.closest('input,textarea,.row2')) return y0 = null; y0 = e.touches[0].clientY; dy = 0; box.style.transition = 'none'; }, { passive: true });
+  wrap.addEventListener('touchmove', e => { if (y0 == null) return; dy = Math.max(0, e.touches[0].clientY - y0); box.style.transform = `translateY(${dy}px)`; }, { passive: true });
+  wrap.addEventListener('touchend', () => { if (y0 == null) return; box.style.transition = 'transform .2s'; if (dy > 110) { box.style.transform = 'translateY(100%)'; setTimeout(() => { close(); box.style.transform = ''; box.style.transition = ''; }, 190); } else { box.style.transform = ''; setTimeout(() => { box.style.transition = ''; }, 220); } y0 = null; });
+}
+swipeClose($('fp'), $('fpc'), closeFp); swipeClose($('sheet'), $('shx'), () => $('sheet').classList.add('hide'));
+document.querySelectorAll('#v3 .fold > h3').forEach(h => { h.onclick = () => { h.parentElement.classList.toggle('open'); try { localStorage.setItem('fold', JSON.stringify([...document.querySelectorAll('#v3 .fold.open')].map(x => x.dataset.f))); } catch (e) {} }; });
+try { const fo = JSON.parse(localStorage.getItem('fold') || 'null'); if (fo) document.querySelectorAll('#v3 .fold').forEach(x => x.classList.toggle('open', fo.includes(x.dataset.f))); } catch (e) {}
+const setTh = () => {};
+let SPD = null;
+async function loadSports() { try { SPD = await api('/api/sports', {}); paintSports(); } catch (e) {} }
+function paintSports() {
+  if (!SPD) return;
+  $('spg').innerHTML = SPD.games.length ? SPD.games.map(x => `<div class="gl"><div class="nm2">${x.fav ? '⭐ ' : ''}${esc(x.away)} @ ${esc(x.home)}<br><span style="color:var(--dim);font-weight:400;font-size:12px">${x.lg.toUpperCase()} · ${x.state === 'in' ? 'LIVE ' + esc(x.as) + '–' + esc(x.hs) + ' · ' + esc(x.detail) : x.state === 'post' ? 'Final ' + esc(x.as) + '–' + esc(x.hs) : esc(x.detail)}</span></div><div class="qa"><button class="${x.watched ? '' : 'alt'}" data-w="${esc(x.key)}" data-on="${x.watched ? 0 : 1}">${x.watched ? '👁 Watching' : 'Watch'}</button></div></div>`).join('') : '<div class="empty">No games loaded yet</div>';
+  if (document.activeElement !== $('spr')) $('spr').value = SPD.delay; $('spd').textContent = SPD.delay;
+}
+let HL = null;
+async function loadHealth() { try { HL = await api('/api/health', {}); paintHealth(); } catch (e) {} }
+function paintHealth() {
+  if (!HL) return; const bad = HL.checks.filter(c => !c.ok);
+  $('hl').innerHTML = `<div style="font-weight:800;margin-bottom:6px;color:${bad.length ? 'var(--ac)' : 'var(--ok)'}">${bad.length ? bad.length + ' need attention' : 'Everything is working'}</div>` + HL.checks.filter(c => !c.ok || c.warn).map(c => `<div class="msg"><span class="dot${c.ok ? ' on' : ''}" style="${c.ok ? 'background:#fbbf24' : 'background:#f87171'}"></span><b>${esc(c.label)}</b><small>${esc(c.detail)}</small></div>`).join('');
+}
+function paintAdmin() {
+  if (!HL) loadHealth();
+  if (!SPD) loadSports();
+  if (!$('v3').classList.contains('hide') || true) {
+    if (document.activeElement !== $('vol') && S.volume != null) { $('vol').value = S.volume; } $('vl').textContent = S.volume != null ? '· ' + S.volume : '';
+    $('pty').textContent = S.party ? '🎉 Party mode is ON · tap to turn off' : 'Party mode is OFF · tap to turn on'; $('pty').className = S.party ? '' : 'alt';
+    $('aq').innerHTML = S.queue.length ? S.queue.map(i => `<div class="item"><img src="${esc(i.art)}" alt=""><div class="x"><div class="t">${i.n === S.current ? '▶ ' : ''}${esc(i.title)}</div><div class="a">${esc(i.by === 'Our Pick' ? '★ Our Pick' : i.by || i.artist)}</div></div><div class="qa">${i.n > S.current + 1 ? `<button class="alt" data-q="bump" data-n="${i.n}">⏫</button>` : ''}${i.n !== S.current ? `<button class="alt" data-q="jump" data-n="${i.n}">▶</button>` : ''}<button class="alt" data-q="remove" data-n="${i.n}">✕</button></div></div>`).join('') : '<div class="empty">Queue is empty</div>';
+    $('am').innerHTML = S.wall.length ? S.wall.slice(0, 12).map(m => `<div class="msg${m.reply ? ' rp' : ''}" style="display:flex;gap:8px;align-items:center"><div style="flex:1;min-width:0"><b>${esc(m.name)}</b> ${esc(m.text)}</div><button class="sm alt" data-md="${m.id}">✕</button></div>`).join('') : '<div class="empty">No messages</div>';
+    $('ag').innerHTML = (S.guests || []).map(g => `<div class="gl"><div class="nm2"><span class="dot${g.here ? ' on' : ''}"></span>${esc(g.name)}${g.admin ? ' ⭐' : ''}</div><div class="c">${g.coins.toLocaleString()} 🪙</div><div class="qa"><button class="alt" data-c="${esc(g.id)}" data-d="-100">−100</button><button class="alt" data-c="${esc(g.id)}" data-d="100">+100</button><button class="alt" data-c="${esc(g.id)}" data-d="500">+500</button><button class="alt" data-c="${esc(g.id)}" data-d="x">…</button>${g.admin ? '' : `<button class="alt" data-k="${esc(g.id)}">Kick</button>`}</div></div>`).join('') || '<div class="empty">Nobody has joined yet</div>';
+  }
+}
+function paintSay() {
+  $('pcard').classList.toggle('hide', !S.prompt); if (S.prompt) $('ptxt').textContent = S.prompt.text;
+  $('feed').innerHTML = S.wall.length ? S.wall.slice(0, 15).map(m => `<div class="msg${m.reply ? ' rp' : ''}"><b>${esc(m.name)}</b> ${esc(m.text)}${m.reply ? '<small>answering the question</small>' : ''}</div>`).join('') : '<div class="empty">Nothing yet. Be the first!</div>';
+}
+async function post(text, reply, el) { if (!text.trim()) return; try { const j = await api('/api/say', { text, reply }); toast(j.msg); el.value = ''; refresh(); } catch (e) { toast(e.message, true); } }
+$('saygo').onclick = () => post($('say').value, false, $('say')); $('ansgo').onclick = () => post($('ans').value, true, $('ans'));
+$('say').onkeydown = e => { if (e.key === 'Enter') $('saygo').click(); }; $('ans').onkeydown = e => { if (e.key === 'Enter') $('ansgo').click(); };
+async function adm(a, body) { try { const j = await api('/api/admin/' + a, body); toast(j.msg || 'Done'); refresh(); } catch (e) { toast(e.message, true); } }
+$('v3').onclick = e => {
+  const t = e.target.closest('button'); if (!t) return;
+  if (t.dataset.h) { if (t.dataset.h === 'restart' && !confirm('Restart the mirror server? The screen reloads in about 10 seconds.')) return; adm(t.dataset.h, {}).then(loadHealth); }
+  else if (t.dataset.w) { adm('sports_watch', { key: t.dataset.w, on: t.dataset.on === '1' }).then(loadSports); }
+  else if (t.dataset.sp) { const [a, k] = t.dataset.sp.split(':'); adm('sports_' + a, a === 'auto' ? { on: !(SPD && SPD.auto) } : { kind: k }).then(loadSports); }
+  else if (t.dataset.md) adm('msgdel', { id: +t.dataset.md });
+  else if (t.id === 'pask') { const v = $('pq').value.trim(); if (v) { adm('prompt', { text: v }); $('pq').value = ''; } }
+  else if (t.id === 'pclr') adm('prompt', { text: '' });
+  else if (t.id === 'mclr') { if (confirm('Clear every message?')) adm('msgdel', {}); }
+  else if (t.dataset.sv) adm('saver', { cmd: t.dataset.sv });
+  else if (t.dataset.sl) adm('sleep', { on: t.dataset.sl === '1' });
+  else if (t.dataset.tr) adm('transport', { cmd: t.dataset.tr });
+  else if (t.id === 'pty') adm('party', { on: !S.party });
+  else if (t.dataset.q) adm('queue', { action: t.dataset.q, n: +t.dataset.n });
+  else if (t.dataset.k) { if (confirm('Sign this guest out?')) adm('kick', { id: t.dataset.k }); }
+  else if (t.dataset.c) {
+    if (t.dataset.d === 'x') { const v = prompt('Set coins to (or +50 / -50 to add / take):'); if (v === null || v.trim() === '') return; const n = parseInt(v, 10); if (isNaN(n)) return toast('Not a number', true); adm('coins', /^[+-]/.test(v.trim()) ? { id: t.dataset.c, delta: n } : { id: t.dataset.c, set: n }); }
+    else adm('coins', { id: t.dataset.c, delta: +t.dataset.d });
+  }
+};
+// the remote: a tap sends one button, holding a direction repeats it
+const rk = key => { fetch('/api/admin/key', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token: tok, key }), keepalive: true }).catch(() => {}); };
+let rT = null, rI = null;
+const rStop = () => { clearTimeout(rT); clearInterval(rI); };
+document.querySelectorAll('.rm [data-k]').forEach(b => {
+  const rep = ['up', 'down', 'left', 'right'].includes(b.dataset.k);
+  b.addEventListener('pointerdown', e => { e.preventDefault(); rk(b.dataset.k); if (rep) { rStop(); rT = setTimeout(() => { rI = setInterval(() => rk(b.dataset.k), 170); }, 380); } });
+  ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => b.addEventListener(ev, rStop));
+});
+$('send').onclick = async () => { const t = $('txt').value; if (!t) return; await adm('text', { text: t }); $('txt').value = ''; };
+let spT = null; $('spr').oninput = () => { $('spd').textContent = $('spr').value; clearTimeout(spT); spT = setTimeout(() => adm('sports_delay', { delay: +$('spr').value }).then(loadSports), 400); };
+setInterval(() => { if (S && S.admin && !$('v3').classList.contains('hide')) { loadSports(); loadHealth(); } }, 8000);
+let vT = null; $('vol').oninput = () => { $('vl').textContent = '· ' + $('vol').value; clearTimeout(vT); vT = setTimeout(() => adm('volume', { volume: +$('vol').value }), 250); };
+async function refresh() { try { S = await api('/api/state', { visible: !document.hidden }); S.at = Date.now(); $('off').classList.add('hide'); paint(); } catch (e) { if (e instanceof TypeError) $('off').classList.remove('hide'); } }
+async function act(a, body) { try { const j = await api('/api/' + a, body); toast(j.msg || 'Done'); refresh(); } catch (e) { toast(e.message, true); } }
+$('vote').onclick = () => act('voteskip'); $('skip').onclick = () => { if (confirm('Skip this song for ' + S.econ.skipnow + ' coins?')) act('skipnow'); };
+$('q').onclick = e => { const b = e.target.closest('[data-bump]'); if (b) act('bump', { n: +b.dataset.bump }); };
+// ---- Discover: shelves of ideas, instant search, artist and album pages, tap a song to request it ----
+let sT = null, D = null, dBusy = false, stack = [], ITEMS = {};
+const inQ = it => S && S.queue.some(x => (x.title + '|' + x.artist).toLowerCase() === (it.title + '|' + it.artist).toLowerCase() && x.n >= S.current);
+const keep = it => { ITEMS[it.id] = it; return it; };
+const card = it => keep(it) && (it.kind === 'artist' ? `<div class="cd2 art" data-open="a" data-name="${esc(it.title)}"><img src="${esc(it.art)}" alt=""><div class="t">${esc(it.title)}</div><div class="a">Artist</div></div>`
+  : it.kind === 'album' ? `<div class="cd2" data-open="b" data-id="${esc(it.id)}" data-name="${esc(it.title)}"><img src="${esc(it.art)}" alt=""><div class="t">${esc(it.title)}</div><div class="a">Album · ${esc(it.artist)}</div></div>`
+  : `<div class="cd2${inQ(it) ? ' in' : ''}" data-song="${esc(it.id)}"><img src="${esc(it.art)}" alt=""><div class="t">${esc(it.title)}</div><div class="a">${esc(it.artist)}</div></div>`);
+const rowS = it => keep(it) && `<div class="item"><img src="${esc(it.art)}" alt="" data-song="${esc(it.id)}"><div class="x" data-song="${esc(it.id)}"><div class="t">${esc(it.title)}</div><div class="a">${esc(it.artist)}${it.album ? ' · ' + esc(it.album) : ''}</div></div>${inQ(it) ? '<button class="sm alt" disabled>In queue</button>' : `<button class="sm" data-req="${esc(it.id)}">Request</button>`}</div>`;
+async function loadDiscover() {
+  if (dBusy || (D && Date.now() - D.at < 600000)) return; dBusy = true;
+  try { const d = await api('/api/discover', {}); D = { at: Date.now(), shelves: d.shelves }; renderDiscover();
+    const a = S && S.now && S.now.artist ? S.now.artist.split(',')[0].split(' & ')[0] : '';
+    if (a) api('/api/discover', { seed: a, only: 'more' }).then(m => { if (m.shelves.length && D) { D.shelves.unshift(m.shelves[0]); renderDiscover(); } }).catch(() => {}); } catch (e) {}
+  dBusy = false;
+}
+function renderDiscover() {
+  if (stack.length || $('sq').value.trim().length >= 2) return;
+  $('res').innerHTML = D && D.shelves.length ? D.shelves.map(sh => `<div class="shelf"><h4>${esc(sh.title)}</h4><div class="row2">${sh.items.map(card).join('')}</div></div>`).join('') : '<div class="empty">Loading ideas…</div>';
+}
+async function doSearch() {
+  const q = $('sq').value.trim(); if (q.length < 2) { renderDiscover(); return; }
+  try { const j = await api('/api/search', { q }); if ($('sq').value.trim() !== q) return;
+    const seen = new Set(), ar = j.artists.filter(a => !seen.has(a.title.toLowerCase()) && seen.add(a.title.toLowerCase()));
+    $('res').innerHTML = (ar.length ? `<div class="row2" style="margin-bottom:6px">${ar.map(card).join('')}</div>` : '') + (j.songs.length ? j.songs.map(rowS).join('') : '<div class="empty">No songs found</div>')
+      + (j.albums.length ? `<div class="st">Albums</div><div class="row2">${j.albums.map(card).join('')}</div>` : ''); } catch (e) { toast(e.message, true); } }
+$('sq').oninput = () => { clearTimeout(sT); stack = []; $('vback').classList.add('hide'); if ($('sq').value.trim().length < 2) { renderDiscover(); return; } sT = setTimeout(doSearch, 500); };
+function showView(v) {                              // an artist or an album page
+  stack.push(v); $('vback').classList.remove('hide'); $('res').innerHTML = '<div class="empty">Loading…</div>';
+  if (v.type === 'a') api('/api/artist', { name: v.name }).then(d => { if (stack[stack.length - 1] !== v) return;
+    const img = (D && Object.values(ITEMS).find(x => x.kind === 'artist' && x.title === d.name) || {}).art || (d.songs[0] || {}).art || '';
+    $('res').innerHTML = `<div class="ah"><img src="${esc(img)}" alt=""><div class="t">${esc(d.name)}</div></div><div class="st">Top songs</div>${d.songs.map(rowS).join('') || '<div class="empty">No songs</div>'}${d.albums.length ? `<div class="st">Albums</div><div class="row2">${d.albums.map(card).join('')}</div>` : ''}`; }).catch(e => toast(e.message, true));
+  else api('/api/album', { id: v.id }).then(d => { if (stack[stack.length - 1] !== v) return;
+    $('res').innerHTML = `<div class="ah"><img src="${esc((d.songs[0] || {}).art || '')}" alt="" style="border-radius:16px"><div><div class="t">${esc(v.name)}</div><div style="color:var(--dim)">${esc((d.songs[0] || {}).artist || '')}</div></div></div>${d.songs.map(rowS).join('') || '<div class="empty">No songs</div>'}`; }).catch(e => toast(e.message, true));
+}
+$('back').onclick = () => { stack.pop(); if (!stack.length) { $('vback').classList.add('hide'); $('sq').value.trim().length >= 2 ? doSearch() : renderDiscover(); } else { const v = stack.pop(); showView(v); } };
+function openSheet(it) {
+  const q = inQ(it), E = S.econ, free = S.admin;
+  $('shx').innerHTML = `<div class="grab"></div><img src="${esc(it.art)}" alt=""><div class="t">${esc(it.title)}</div><div class="a">${esc(it.artist)}${it.album ? ' · ' + esc(it.album) : ''}</div>
+    ${q ? '<button class="alt" disabled>Already in the queue</button>' : `<button data-req="${esc(it.id)}" data-close="1">Request · ${free ? 'free' : E.request + ' 🪙'}</button>`}
+    <button class="alt" data-open="a" data-name="${esc(it.artist.split(',')[0].split(' & ')[0])}" data-close="1">More from ${esc(it.artist.split(',')[0].split(' & ')[0])}</button><button class="alt" data-close="1">Close</button>`;
+  $('sheet').classList.remove('hide');
+}
+$('sheet').onclick = e => { const b = e.target.closest('button'); if (b && b.dataset.req) { act('request', { id: b.dataset.req }); }
+  if (b && b.dataset.open === 'a') showView({ type: 'a', name: b.dataset.name });
+  if (e.target === $('sheet') || (b && b.dataset.close)) $('sheet').classList.add('hide'); };
+$('res').onclick = e => {
+  const rq = e.target.closest('[data-req]'); if (rq) { rq.disabled = true; act('request', { id: rq.dataset.req }); setTimeout(() => rq.disabled = false, 1500); return; }
+  const o = e.target.closest('[data-open]'); if (o) return showView(o.dataset.open === 'a' ? { type: 'a', name: o.dataset.name } : { type: 'b', id: o.dataset.id, name: o.dataset.name });
+  const sg = e.target.closest('[data-song]'); if (sg && ITEMS[sg.dataset.song]) openSheet(ITEMS[sg.dataset.song]);
+};
+// ---- being an app: an install hint, a screen that stays on, a tap you can feel ----
+const standalone = () => window.navigator.standalone === true || matchMedia('(display-mode: standalone)').matches;
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+let deferred = null; addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferred = e; showInstall(); });
+function showInstall() {
+  if (standalone() || localStorage.getItem('instx')) return;
+  $('insth').innerHTML = deferred ? 'Add it to your home screen for one-tap access.' : isIOS ? 'Tap <span class="hh">Share ⬆︎</span>, then <span class="hh">Add to Home Screen</span>.' : 'Open the browser menu <span class="hh">⋮</span>, then <span class="hh">Add to Home screen</span>.';
+  $('inst').classList.remove('hide');
+}
+$('instx').onclick = () => { localStorage.setItem('instx', '1'); $('inst').classList.add('hide'); };
+$('inst').onclick = e => { if (deferred && e.target.id !== 'instx') { deferred.prompt(); deferred = null; $('inst').classList.add('hide'); } };
+setTimeout(() => { if (tok) showInstall(); }, 6000);
+if (location.protocol === 'http:' && !localStorage.getItem('secx')) fetch('https://party.local/ping', { mode: 'cors', cache: 'no-store' }).then(r => r.ok && $('sec').classList.remove('hide')).catch(() => {});      // (works only on a phone that has installed + trusted the certificate)
+const hx = document.createElement('label'); hx.style.cssText = 'position:fixed;left:-99px;top:-99px;opacity:0;pointer-events:none'; hx.innerHTML = '<input type="checkbox" switch>'; document.body.appendChild(hx);
+function haptic() { try { hx.click(); } catch (e) {} try { navigator.vibrate && navigator.vibrate(8); } catch (e) {} }     // (iPhones: the switch trick, iOS 17.4+; Android: vibrate)
+let wl = null; async function keepAwake() { try { if (document.visibilityState === 'visible' && navigator.wakeLock && !wl) { wl = await navigator.wakeLock.request('screen'); wl.addEventListener('release', () => { wl = null; }); } } catch (e) {} }     // (needs a secure page)
+document.addEventListener('visibilitychange', keepAwake); keepAwake();
+document.addEventListener('pointerdown', e => { if (e.target.closest('button')) haptic(); }, true);
+// ---- service worker (offline shell) + notifications ----
+let swr = null;
+if ('serviceWorker' in navigator && isSecureContext) navigator.serviceWorker.register('/sw.js').then(r => { swr = r; }).catch(() => {});
+const urlKey = k => Uint8Array.from(atob(k.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0));
+async function pushSub() { const r = await navigator.serviceWorker.ready; return r.pushManager.getSubscription(); }
+async function openBell() {
+  let h = '<div class="grab"></div><h3 style="margin:0 0 8px">🔔 Notifications</h3>';
+  if (!isSecureContext) h += '<p class="hint">Notifications need the secure address. Open <b>https://party.local</b> (the green “Switch” bar at the top does it).</p>';
+  else if (!('PushManager' in window) || !('serviceWorker' in navigator)) h += '<p class="hint">' + (isIOS && !standalone() ? 'On iPhone, first tap <span class="hh">Share ⬆︎</span> → <span class="hh">Add to Home Screen</span>, then open the Party app from your home screen and tap the bell again.' : 'This browser can\'t do notifications.') + '</p>';
+  else if (Notification.permission === 'denied') h += '<p class="hint">Notifications are blocked for this app. Turn them on in your phone\'s Settings → Notifications.</p>';
+  else {
+    const sub = await pushSub().catch(() => null); let p = { mine: true, sports: false };
+    if (sub) { try { p = (await api('/api/push/state', { endpoint: sub.endpoint })).prefs || p; } catch (e) {} }
+    h += sub ? `<label class="gl" style="display:flex;gap:10px;align-items:center;margin:10px 0"><input type="checkbox" id="pm" ${p.mine ? 'checked' : ''}> My song is up next / playing</label>
+      <label class="gl" style="display:flex;gap:10px;align-items:center;margin:10px 0"><input type="checkbox" id="ps" ${p.sports ? 'checked' : ''}> Big Detroit sports moments</label>
+      <div class="row"><button class="alt" id="pt">Send a test</button><button class="alt" id="po">Turn off</button></div>`
+      : '<p class="hint">Get a ping when your requested song is next, and (if you like) when the Lions, Red Wings or Tigers score.</p><button id="pn" style="width:100%">Turn on notifications</button>';
+  }
+  h += `<label class="gl" style="display:flex;gap:10px;align-items:center;margin:14px 0 0;border-top:1px solid #2a2745;padding-top:14px"><input type="checkbox" id="pl" ${lockOn ? 'checked' : ''}><span>Show the song on my lock screen<small style="display:block;color:var(--dim);margin-top:2px">Plays a silent track so your phone shows a Now Playing card. It pauses other music on your phone.</small></span></label>`;
+  h += '<button class="alt" data-close="1" style="width:100%;margin-top:12px">Close</button>';
+  $('shx').innerHTML = h; $('sheet').classList.remove('hide');
+  const sv = async () => { const s = await pushSub(); if (s) api('/api/push/prefs', { endpoint: s.endpoint, prefs: { mine: $('pm').checked, sports: $('ps').checked } }).catch(() => {}); };
+  $('pl').onchange = async () => { lockOn = $('pl').checked; try { localStorage.setItem('lock', lockOn ? '1' : '0'); } catch (e) {} if (lockOn) { await lockStart(); toast(lockAu && !lockAu.paused ? 'Lock screen player is on' : 'Tap anywhere to start it'); } else { lockStop(); toast('Lock screen player is off'); } };
+  if ($('pm')) { $('pm').onchange = $('ps').onchange = sv; $('pt').onclick = () => api('/api/push/test').then(() => toast('Sent — check your notifications')).catch(e => toast(e.message, 1)); $('po').onclick = async () => { const s = await pushSub(); if (s) { await api('/api/push/unsubscribe', { endpoint: s.endpoint }).catch(() => {}); await s.unsubscribe(); } openBell(); }; }
+  if ($('pn')) $('pn').onclick = async () => {
+    try {
+      if (await Notification.requestPermission() !== 'granted') return openBell();
+      const reg = await navigator.serviceWorker.ready, k = (await api('/api/push/key')).key;
+      const s = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: urlKey(k) });
+      await api('/api/push/subscribe', { sub: s.toJSON(), prefs: { mine: true, sports: false } }); toast('Notifications on 🎉'); openBell();
+    } catch (e) { toast(e.message || 'Could not turn on', 1); }
+  };
+}
+$('bell').onclick = openBell;
+function start() { $('join').classList.add('hide'); $('app').classList.remove('hide'); $('nav').classList.remove('hide'); setTh(); refresh(); }
+// instant updates: the mirror pings this phone the moment the queue or song changes (the slow poll stays as a safety net)
+let es = null, esOk = false;
+function live() {
+  if (!tok || es || !window.EventSource) return;
+  es = new EventSource('/api/events?t=' + encodeURIComponent(tok));
+  es.onopen = () => { esOk = true; }; es.onmessage = () => refresh();
+  es.onerror = () => { esOk = false; es.close(); es = null; setTimeout(live, 4000); };
+}
+setInterval(() => { if (tok) { live(); if (!esOk || ++pollN % 4 === 0) refresh(); } }, 5000);
+let pollN = 0; document.addEventListener('visibilitychange', () => { if (!document.hidden && tok) refresh(); });
+if (tok) start(); else $('join').classList.remove('hide');
+</script></body></html>

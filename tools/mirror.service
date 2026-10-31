@@ -1,0 +1,14 @@
+# The mirror server (proxy.py). Install (once), from the project folder (assumed to live in ~/mirror-dashboard; edit the path if not):
+#   mkdir -p ~/.config/systemd/user && cp tools/mirror.service ~/.config/systemd/user/ && systemctl --user daemon-reload && systemctl --user enable --now mirror.service
+# To keep it running when nobody is logged in:  loginctl enable-linger $USER
+[Unit]
+Description=OpenMirror dashboard server
+After=network-online.target
+
+[Service]
+ExecStart=/usr/bin/python3 %h/mirror-dashboard/proxy.py
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=default.target
