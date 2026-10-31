@@ -1,5 +1,5 @@
 # Required: encryption for the local certificate authority and phone push notifications
-cryptography>=41
+cryptography>=50.0.2
 # Optional, Linux only: read the Xbox controller's guide button and wake from sleep on a button press
 evdev>=1.6
 # Optional: only for the poster / game-list build tools in tools/
