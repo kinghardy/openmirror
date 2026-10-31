@@ -20,7 +20,7 @@ OpenMirror started as one person's living-room mirror and is being opened up. Th
 - **More code cleanup:** a package layout (`openmirror/` for the Python, `web/` for the pages), tests for the older music, sports and party modules, and the same split for `guest.html` and `music.js`.
 - **Controller pairing** from the mirror (Bluetooth).
 - Bundle the one remote font so the home page makes no request to Google.
-- Packaging: an installer script, a service for the audio policy, documentation with screenshots.
+- Packaging: an installer script, a service for the audio policy, a step-by-step build guide (screenshots are done: `tools/screenshots.py`).
 
 ## Later: community channels and themes
 

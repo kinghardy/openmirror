@@ -38,6 +38,15 @@ Changing how requests are routed (`proxy.py`)? Record the server's answers first
 
 Modules are layered (no module imports one above it); `tools/check_names.py` and the tests catch most slips.
 
+## Good first contributions
+
+- **A theme.** Seasonal (Christmas, Lunar New Year, Valentine's), a sports team, a retro console: see [docs/THEMES.md](docs/THEMES.md). No Python needed.
+- **Screenshots.** Changed something on screen? Run `python3 tools/screenshots.py` (needs Chrome or Chromium) and include the new pictures; they use made-up data, never your own.
+- **Something from the [roadmap](docs/ROADMAP.md)'s "Next" list**, such as the sports team picker or bundling the remote font.
+- Issues labelled `good first issue` are small and come with pointers to the code.
+
+Questions are welcome in [Discussions](https://github.com/kinghardy/openmirror/discussions).
+
 ## Themes and channels
 
 A theme is the easiest first contribution: a folder with a `theme.json` and some CSS. Read [docs/THEMES.md](docs/THEMES.md). A channel's `channel.json` must only ask for permissions from the list in `mirror_channels.py`; unknown permissions are refused on load.
