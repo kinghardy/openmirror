@@ -1,0 +1,22 @@
+# Tooling configuration. The project itself has no build step: run it with `python3 proxy.py` (see README).
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+extend-exclude = ["promo", "tests/__init__.py"]
+
+[tool.ruff.lint]
+# start small: real bugs only (undefined names, unused imports/variables, risky patterns); widen later
+select = ["E4", "E7", "E9", "F", "B"]
+ignore = [
+    "E731",   # assigning a lambda to a name: used on purpose for short helpers
+    "E741",   # one-letter names such as l: the style is dense, the formatter will make it readable first
+    "B904",   # raise ... from ...: worth doing, but a separate change
+    "B007",   # loop variable not used
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["E402"]     # the tests set the path before importing the modules
+"tools/*" = ["E402"]     # so do the scripts
+
+[tool.ruff.format]
+quote-style = "preserve"        # do not churn single/double quotes: only layout changes

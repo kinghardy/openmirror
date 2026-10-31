@@ -168,7 +168,7 @@
       if (n.secure) kbOpen({ label: 'Password for ' + n.ssid, hint: 'The mirror stays on its current network if this fails', secret: true, r: 1, c: 4 }, join); else join('');
     } else if (view === 'theme') {
       const t = items[sel];
-      await fetch('/theme/set', { method: 'POST', body: JSON.stringify({ mode: t.id }) }); if (window.OpenMirrorThemes) await window.OpenMirrorThemes.reload(); paint(); toast('Theme: ' + t.name, 'good');
+      await fetch('/theme/set', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ mode: t.id }) }); if (window.OpenMirrorThemes) await window.OpenMirrorThemes.reload(); paint(); toast('Theme: ' + t.name, 'good');
     }
   }
   async function extra(k) {

@@ -14,15 +14,21 @@ jobs:
         with: { python-version: "3.12" }
       - uses: actions/setup-node@v4
         with: { node-version: "22" }
-      - run: pip install cryptography
+      - run: pip install cryptography ruff
+      - name: Lint (real-bug rules)
+        run: ruff check .
+      - name: Formatting
+        run: ruff format --check .
       - name: Python compiles
         run: python -m compileall -q proxy.py mirror_*.py tools tests
-      - name: Undefined names
-        run: python tools/check_names.py
+      - name: Undefined names and imports that do not resolve
+        run: |
+          python tools/check_names.py
+          python tools/check_imports.py
       - name: Unit tests
         run: python -m unittest discover -s tests -v
       - name: JavaScript syntax
-        run: for f in *.js themes/*.js themes/*/*.js games/*.js; do node --check "$f" || exit 1; done
+        run: for f in *.js home/*.js themes/*.js themes/*/*.js games/*.js; do node --check "$f" || exit 1; done
       - name: Secret and personal-data scan
         run: python tools/scan_secrets.py
   gitleaks:

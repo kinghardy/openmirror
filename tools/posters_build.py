@@ -2,19 +2,30 @@
 """Builds ../posters-curated.json for the Poster Wall's hand-picked shelves: each title is looked up on TMDB (key in
 ~/.config/mirror/tmdb_key) so the dashboard needs no lookups at runtime, and each carries a one-line "why it matters".
 Edit the lists below, run `python3 tools/posters_build.py`, reload the kiosk. Titles that can't be matched are reported."""
-import json, os, pathlib, sys, time, urllib.parse, urllib.request
+
+import json
+import os
+import pathlib
+import time
+import urllib.parse
+import urllib.request
 
 KEY = pathlib.Path(os.path.expanduser("~/.config/mirror/tmdb_key")).read_text().strip()
 OUT = pathlib.Path(__file__).resolve().parent.parent / "posters-curated.json"
+
 
 def tmdb(path, **q):
     q["api_key"] = KEY
     for attempt in range(3):
         try:
-            with urllib.request.urlopen(f"https://api.themoviedb.org/3/{path}?{urllib.parse.urlencode(q)}", timeout=15) as r: return json.load(r)
+            with urllib.request.urlopen(
+                f"https://api.themoviedb.org/3/{path}?{urllib.parse.urlencode(q)}", timeout=15
+            ) as r:
+                return json.load(r)
         except Exception:
             time.sleep(1 + attempt)
     return {}
+
 
 # (title, year, why it matters). media 'movie' unless the list says 'tv'.
 PD_SILENT = [
@@ -77,7 +88,11 @@ CANON = [
     ("Toy Story", 1995, "The first fully computer-animated feature. To infinity."),
     ("Fight Club", 1999, "The first rule is you don’t talk about it. We all did."),
     ("The Matrix", 1999, "Bullet time, green code, and a whole new vocabulary."),
-    ("The Lord of the Rings: The Fellowship of the Ring", 2001, "Middle-earth, finally on screen the way it looked in your head."),
+    (
+        "The Lord of the Rings: The Fellowship of the Ring",
+        2001,
+        "Middle-earth, finally on screen the way it looked in your head.",
+    ),
     ("Spirited Away", 2001, "Miyazaki’s dream, and the only hand-drawn film to win Best Animated Feature."),
     ("The Dark Knight", 2008, "The superhero film that became a crime epic."),
     ("Inception", 2010, "A heist inside a dream inside a dream. That spinning top."),
@@ -123,34 +138,68 @@ TV = [
     ("The Bear", 2022, "Yes, Chef. Kitchen chaos in Chicago."),
 ]
 
+
 def resolve(title, year, media):
     path = "search/tv" if media == "tv" else "search/movie"
-    q = {"query": {"D.O.A.": "DOA"}.get(title, title), "include_adult": "false"}      # TMDB search chokes on the dots
+    q = {"query": {"D.O.A.": "DOA"}.get(title, title), "include_adult": "false"}  # TMDB search chokes on the dots
     q["first_air_date_year" if media == "tv" else "year"] = year
     res = [r for r in tmdb(path, **q).get("results", []) if r.get("poster_path")]
-    if not res and media == "movie":                      # TMDB dates some old films a year off
-        res = [r for r in tmdb(path, query=title).get("results", []) if r.get("poster_path") and abs(int((r.get("release_date") or "0000")[:4] or 0) - year) <= 1]
-    if not res: return None
+    if not res and media == "movie":  # TMDB dates some old films a year off
+        res = [
+            r
+            for r in tmdb(path, query=title).get("results", [])
+            if r.get("poster_path") and abs(int((r.get("release_date") or "0000")[:4] or 0) - year) <= 1
+        ]
+    if not res:
+        return None
     import re
+
     norm = lambda t: re.sub(r"[^a-z0-9]", "", (t or "").lower())
-    exact = [r for r in res if norm(r.get("title") or r.get("name")) == norm(title) or norm(r.get("original_title") or r.get("original_name")) == norm(title)]
+    exact = [
+        r
+        for r in res
+        if norm(r.get("title") or r.get("name")) == norm(title)
+        or norm(r.get("original_title") or r.get("original_name")) == norm(title)
+    ]
     res = exact or res
-    res.sort(key=lambda r: -r.get("vote_count", 0))       # the famous one, not an obscure namesake
+    res.sort(key=lambda r: -r.get("vote_count", 0))  # the famous one, not an obscure namesake
     return res[0]
+
 
 def build(lst, media):
     out, missing = [], []
     for title, year, blurb in lst:
         r = resolve(title, year, media)
-        if not r: missing.append(f"{title} ({year})"); continue
-        out.append(dict(tid=r["id"], media=media, title=r.get("name") or r.get("title"), year=year, poster=r["poster_path"], back=r.get("backdrop_path") or "",
-                        vote=round(r.get("vote_average", 0), 1), overview=r.get("overview", ""), blurb=blurb))
+        if not r:
+            missing.append(f"{title} ({year})")
+            continue
+        out.append(
+            dict(
+                tid=r["id"],
+                media=media,
+                title=r.get("name") or r.get("title"),
+                year=year,
+                poster=r["poster_path"],
+                back=r.get("backdrop_path") or "",
+                vote=round(r.get("vote_average", 0), 1),
+                overview=r.get("overview", ""),
+                blurb=blurb,
+            )
+        )
     return out, missing
 
-lists = {"pd-silent": (PD_SILENT, "movie"), "pd-classic": (PD_CLASSIC, "movie"), "canon": (CANON, "movie"), "tv-canon": (TV, "tv")}
+
+lists = {
+    "pd-silent": (PD_SILENT, "movie"),
+    "pd-classic": (PD_CLASSIC, "movie"),
+    "canon": (CANON, "movie"),
+    "tv-canon": (TV, "tv"),
+}
 result, report = {}, []
 for name, (lst, media) in lists.items():
     result[name], missing = build(lst, media)
-    report.append(f"{name}: {len(result[name])}/{len(lst)}" + (f"  (no match: {', '.join(missing)})" if missing else ""))
+    report.append(
+        f"{name}: {len(result[name])}/{len(lst)}" + (f"  (no match: {', '.join(missing)})" if missing else "")
+    )
 OUT.write_text(json.dumps(result, ensure_ascii=False, indent=1))
 print("\n".join(report), "\nwrote", OUT)

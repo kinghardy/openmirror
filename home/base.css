@@ -1,0 +1,329 @@
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      width: 1080px;
+      height: 1920px;
+      background: #000000; /* Pure black background for physical mirror reflection */
+      color: #333;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    /* Glass Effect Container */
+    .mirror-frame {
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, rgba(240, 243, 248, 0.95) 0%, rgba(215, 222, 232, 0.95) 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 40px 30px;
+      position: relative;
+    }
+
+    /* Top Wii Header Bar */
+    .wii-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 20px;
+      padding: 20px 35px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+      border: 2px solid #e0e6ed;
+    }
+
+    .time-display {
+      font-size: 52px;
+      font-weight: 700;
+      color: #445566;
+      letter-spacing: -1px;
+    }
+
+    .date-display {
+      font-size: 24px;
+      font-weight: 500;
+      color: #778899;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .wii-logo-badge {
+      font-size: 38px;
+      font-weight: 800;
+      color: #0099ff;
+      letter-spacing: -1px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .wii-logo-badge span {
+      font-size: 18px;
+      background: #0099ff;
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+
+    /* Main Grid Area - 3 columns x 4 rows */
+    .channel-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(4, 1fr);
+      gap: 24px;
+      width: 100%;
+      height: 1380px;
+      padding: 10px 0;
+    }
+
+    /* Wii Channel TV Tile */
+    .channel-tile {
+      background: linear-gradient(145deg, #ffffff, #e6ecf2);
+      border-radius: 28px;
+      border: 4px solid #d0d7e2;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08), inset 0 2px 4px rgba(255,255,255,0.8);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      overflow: hidden;
+      padding: 20px;
+    }
+
+    /* Highlight state for OpenMote Navigation */
+    .channel-tile.focused {
+      border-color: #00aaff;
+      box-shadow: 0 0 0 8px rgba(0, 170, 255, 0.4), 0 15px 35px rgba(0,170,255,0.25);
+      transform: scale(1.04);
+      z-index: 10;
+      background: linear-gradient(145deg, #ffffff, #f0f7ff);
+    }
+
+    .channel-icon {
+      font-size: 64px;
+      margin-bottom: 12px;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+    }
+
+    .channel-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #334455;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .channel-subtitle {
+      font-size: 15px;
+      color: #778899;
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    /* Wii Bottom Control Bar */
+    .wii-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 10px;
+    }
+
+    .wii-btn {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #ffffff, #dcdfe5);
+      border: 4px solid #bec5d1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #556677;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.1);
+      font-size: 16px;
+      gap: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .wii-btn.focused {
+      border-color: #00aaff;
+      box-shadow: 0 0 0 6px rgba(0, 170, 255, 0.4), 0 10px 25px rgba(0,0,0,0.15);
+      transform: scale(1.08);
+      background: #ffffff;
+    }
+
+    .wii-btn-icon {
+      font-size: 32px;
+    }
+
+    /* Fullscreen Channel Overlay App View */
+    .app-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1080px;
+      height: 1920px;
+      background: #f5f7fa;
+      z-index: 100;
+      display: none;
+      flex-direction: column;
+      padding: 60px 50px;
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    .app-overlay.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .app-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 3px solid #dce2ec;
+      padding-bottom: 30px;
+      margin-bottom: 40px;
+    }
+
+    .app-title {
+      font-size: 48px;
+      font-weight: 800;
+      color: #223344;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .back-hint {
+      background: #0099ff;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-size: 22px;
+      font-weight: 700;
+      box-shadow: 0 6px 15px rgba(0, 153, 255, 0.3);
+    }
+
+    /* App-Specific Layouts */
+    .billiards-app {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+      height: 100%;
+    }
+
+    .scoreboard-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .score-card {
+      background: #ffffff;
+      border-radius: 32px;
+      padding: 40px;
+      border: 4px solid #d0d7e2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+    }
+
+    .score-card.active-player {
+      border-color: #00aaff;
+      box-shadow: 0 0 0 6px rgba(0, 170, 255, 0.3);
+    }
+
+    .player-name {
+      font-size: 36px;
+      font-weight: 700;
+      color: #556677;
+      margin-bottom: 20px;
+    }
+
+    .score-num {
+      font-size: 140px;
+      font-weight: 900;
+      color: #0099ff;
+      line-height: 1;
+    }
+
+    .pool-controls-hint {
+      background: #eef3f8;
+      border-radius: 20px;
+      padding: 30px;
+      width: 100%;
+      text-align: center;
+      font-size: 24px;
+      color: #445566;
+      border: 2px solid #d0d7e2;
+      margin-top: auto;
+    }
+
+    /* Lighting App Grid */
+    .lighting-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      width: 100%;
+    }
+
+    .scene-card {
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 40px;
+      border: 4px solid #d0d7e2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      font-size: 28px;
+      font-weight: 700;
+      color: #334455;
+    }
+
+    .scene-card.selected {
+      border-color: #00aaff;
+      background: #f0f8ff;
+      box-shadow: 0 0 0 6px rgba(0, 170, 255, 0.3);
+    }
+
+    /* Onscreen OpenMote Controller Legend */
+    .remote-legend {
+      position: absolute;
+      bottom: 25px;
+      right: 40px;
+      background: rgba(255,255,255,0.9);
+      padding: 10px 20px;
+      border-radius: 20px;
+      border: 2px solid #ccc;
+      font-size: 16px;
+      font-weight: 600;
+      color: #666;
+      display: flex;
+      gap: 15px;
+    }
+  

@@ -19,6 +19,7 @@ Your Wi-Fi password, Home Assistant token, TMDB key, the guest accounts (names, 
 ## Controls that exist today
 
 - **Secrets are write-only.** Keys are saved to `~/.config/mirror/<name>` with mode 0600 (written atomically, private from the first byte). Every API and screen shows only a masked tail (`••••1a2b`); there is no way to read a saved secret back, and tests assert that a saved secret never appears in a response.
+- **The dashboard server answers only the mirror's own pages.** It listens on 127.0.0.1, but any web page open in a browser on the same machine can still send it requests, so every request is checked: it must be addressed to this machine by name (blocks DNS rebinding), must not come from another site (`Sec-Fetch-Site`, `Origin`), and every POST must be JSON (a cross-site form cannot send that without a preflight the server never grants). This covers everything the server does, including the Home Assistant pass-through, guest coins and admin rights, launching apps and restarting. Local programs without browser headers are let through (see "Who we worry about").
 - **The settings API answers only to the mirror itself.** It checks the `Host` header (a DNS-rebinding page cannot make the browser send `localhost`) and requires a custom header that a cross-site page cannot add.
 - **Phone setup needs physical presence.** A 6-digit code is created only on the mirror's screen, lasts 10 minutes, works once, locks after 5 wrong guesses, and each address is rate-limited. A successful code gives a short session (random token, kept only as a hash, 15 minutes after last use) in an `HttpOnly`, `SameSite=Strict` cookie, which is `Secure` over HTTPS. Cancelling on the mirror ends every session.
 - **Keys and addresses only over HTTPS.** Changing a key, or an address that could receive one (the Home Assistant address), is refused over plain HTTP.
@@ -27,7 +28,8 @@ Your Wi-Fi password, Home Assistant token, TMDB key, the guest accounts (names, 
 - **Required channels cannot be hidden**, so nobody can lock themselves out of settings.
 - **Wi-Fi rollback**: a failed join puts the previous connection back, so a typo cannot leave the mirror offline.
 - **A private certificate authority** for `https://party.local` is *name-constrained* to `.local`, `localhost` and private IP ranges, so a stolen CA key cannot be used to impersonate public websites in clients that enforce name constraints.
-- **Push notifications** use the standard encrypted Web Push protocol (RFC 8291/8292) with a per-install key; the contents are encrypted end to end.
+- **Push notifications** use the standard encrypted Web Push protocol (RFC 8291/8292) with a per-install key; the contents are encrypted end to end. A phone can only register an address at a real browser push service (Apple, Google, Mozilla, Microsoft) with well-formed keys, so a guest cannot point the mirror's outgoing requests at your router or other devices; each guest keeps at most 5 devices.
+- **Background work stops when nobody is listening**: the live-update loop only asks the speaker for its queue while a phone is connected, and open live connections are capped.
 - **No telemetry.** The mirror contacts only the services you set up.
 
 ## Known gaps (please read)

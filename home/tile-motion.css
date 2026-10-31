@@ -1,0 +1,16 @@
+@keyframes tileIn { from { opacity:0; translate:0 40px; } to { opacity:1; translate:0 0; } }
+@keyframes glowPulse { 0%,100% { box-shadow:0 0 0 8px rgba(0,170,255,.35),0 15px 35px rgba(0,170,255,.2); } 50% { box-shadow:0 0 0 14px rgba(0,170,255,.18),0 15px 45px rgba(0,170,255,.4); } }
+@keyframes shine { from { transform:translateX(-120%) skewX(-20deg); } to { transform:translateX(260%) skewX(-20deg); } }
+.channel-tile { animation: tileIn .55s cubic-bezier(.2,.8,.2,1) backwards; }
+.channel-tile:nth-child(1){animation-delay:.05s}.channel-tile:nth-child(2){animation-delay:.1s}.channel-tile:nth-child(3){animation-delay:.15s}
+.channel-tile:nth-child(4){animation-delay:.2s}.channel-tile:nth-child(5){animation-delay:.25s}.channel-tile:nth-child(6){animation-delay:.3s}
+.channel-tile:nth-child(7){animation-delay:.35s}.channel-tile:nth-child(8){animation-delay:.4s}.channel-tile:nth-child(9){animation-delay:.45s}
+.channel-tile:nth-child(10){animation-delay:.5s}.channel-tile:nth-child(11){animation-delay:.55s}.channel-tile:nth-child(12){animation-delay:.6s}
+.channel-tile.focused { animation: glowPulse 1.6s ease-in-out infinite; }
+.channel-tile::after { content:""; position:absolute; top:0; left:0; width:35%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,.7),transparent); opacity:0; pointer-events:none; }
+.channel-tile.focused::after { opacity:1; animation: shine .9s ease-out 1; }
+.channel-icon { font-size:76px; }
+.channel-title { font-size:25px; }
+.wii-header { background:linear-gradient(135deg,rgba(255,255,255,.95),rgba(225,238,250,.9)); }
+.wii-btn:hover, .wii-btn.focused { transform:scale(1.08); }
+.remote-legend { gap:18px; }

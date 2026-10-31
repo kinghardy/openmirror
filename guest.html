@@ -202,7 +202,7 @@ function paintGame() {
   const sc = G.state === 'pre' ? ['', ''] : [A.score, H.score];
   const n = Math.max((A.lines || []).length, (H.lines || []).length);
   const ls = n ? `<table class="ls"><tr><th></th>${Array.from({ length: n }, (_, i) => `<th>${i + 1}</th>`).join('')}<th>T</th></tr>${[A, H].map(t => `<tr><td>${esc(t.abbr)}</td>${Array.from({ length: n }, (_, i) => `<td>${esc((t.lines || [])[i] == null ? '' : t.lines[i])}</td>`).join('')}<td>${esc(t.score == null ? '' : t.score)}</td></tr>`).join('')}</table>` : '';
-  const wp = d.wp != null && live ? `<div class="wp"><i style="width:${100 - d.wp}%;background:${esc(A.color)}"></i><i style="width:${d.wp}%;background:${esc(HC)}"></i></div>` : '';
+  const hp = Math.round(d.wp * 100), wp = d.wp != null && live ? `<div class="wp"><i style="width:${100 - hp}%;background:${esc(A.color)}"></i><i style="width:${hp}%;background:${esc(HC)}"></i></div>` : '';
   const side = t => `<div class="tm2"><img src="${esc(t.logo)}" alt=""><b>${esc(t.abbr)}</b><div class="n">${esc(sc[t === A ? 0 : 1])}</div></div>`;
   let body = '';
   if (gTab === 'sum') {

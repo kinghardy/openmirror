@@ -10,12 +10,14 @@ OpenMirror started as one person's living-room mirror and is being opened up. Th
 - Themes with seasonal auto-switching.
 - A getting-started checklist for a fresh install.
 - Unit tests, a smoke test, a name checker, a secret scanner, a clean-history export tool.
+- Code readability pass: Python formatted and linted with ruff, the request router turned into a table of small methods, and the 3,100-line home page split into `index.html` (markup) plus `home/*.css` and `home/*.js`.
 
 ## Next
 
 - **Team picker** for sports (today the Sports channel is Detroit-first by default).
 - **Lights picker**: list what Home Assistant finds instead of a hand-edited entity list (`ha-config.js`).
 - **Serve only an allow-list of web files** from the local server (it currently serves the whole project folder to localhost).
+- **More code cleanup:** a package layout (`openmirror/` for the Python, `web/` for the pages), tests for the older music, sports and party modules, and the same split for `guest.html` and `music.js`.
 - **Controller pairing** from the mirror (Bluetooth).
 - Bundle the one remote font so the home page makes no request to Google.
 - Packaging: an installer script, a service for the audio policy, documentation with screenshots.

@@ -1,0 +1,68 @@
+/* Poster Wall, redesigned: a dark cinema lobby. One poster is the focus; everything else steps back. */
+#app-posters { padding:0; background:#05060b; overflow:hidden; }
+#pw-root { position:absolute; inset:0; display:block; }
+.ph, .qz { position:absolute; inset:0; color:#fff; overflow:hidden; font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; }
+.ph-bg { position:absolute; inset:0; opacity:0; transition:opacity .45s; }
+.ph-bg canvas { width:100%; height:100%; display:block; }   /* a 32x48 thumbnail stretched over the screen: a free, smooth blur */
+.ph-bg.on { opacity:1; }
+.ph-shade { position:absolute; inset:0; background:linear-gradient(180deg, rgba(5,6,11,.66) 0%, rgba(5,6,11,.34) 28%, rgba(5,6,11,.5) 60%, rgba(5,6,11,.94) 100%); }
+.ph-top { position:absolute; left:56px; right:56px; top:50px; display:flex; align-items:baseline; gap:30px; font-size:26px; font-weight:800; letter-spacing:.32em; color:rgba(255,255,255,.72); }
+.ph-top .count { font-size:26px; letter-spacing:.1em; color:rgba(255,255,255,.5); font-variant-numeric:tabular-nums; }
+.ph-title { position:absolute; left:56px; right:56px; top:122px; }
+.ph-title .g { font-size:24px; font-weight:800; letter-spacing:.34em; text-transform:uppercase; color:#ffd24a; }
+.ph-title .n { margin-top:8px; font-size:88px; font-weight:800; line-height:1.02; letter-spacing:-1.5px; text-shadow:0 6px 30px rgba(0,0,0,.5); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ph-title .b { margin-top:10px; font-size:31px; font-weight:500; color:rgba(255,255,255,.68); max-width:960px; line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.ph-title.swap { animation:phSwap .5s cubic-bezier(.2,.8,.2,1); }
+@keyframes phSwap { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:none; } }
+.ph-stage { position:absolute; left:0; top:330px; width:1080px; height:960px; perspective:1700px; }
+.pc { position:absolute; left:50%; top:0; width:640px; height:960px; margin-left:-320px; border-radius:22px; overflow:hidden; background:#10141c;
+  transition:transform .34s cubic-bezier(.2,.8,.2,1), opacity .3s; }
+.pc.cur { box-shadow:0 26px 50px rgba(0,0,0,.55); }
+.pc:not(.cur) .gp, .pc:not(.cur) .gp * { animation-play-state:paused !important; }   /* only the front game poster animates */
+.pc img { width:100%; height:100%; object-fit:cover; display:block; }
+.pc .dim { position:absolute; inset:0; background:#000; opacity:0; transition:opacity .3s; pointer-events:none; }
+.pc .pw-mini { position:absolute; inset:0; overflow:hidden; }
+.qcard { width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:26px; text-align:center; background:radial-gradient(circle at 50% 30%, #5b3bd6, #1a1140 70%); }
+.qcard .q { font-size:420px; line-height:.9; font-weight:900; color:rgba(255,255,255,.92); text-shadow:0 20px 60px rgba(0,0,0,.4); }
+.qcard .t { font-size:78px; font-weight:900; line-height:1.02; }
+.qcard .s { font-size:34px; font-weight:700; color:#ffd24a; letter-spacing:.14em; text-transform:uppercase; }
+.ph-msg { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px; font-size:42px; font-weight:700; color:rgba(255,255,255,.65); text-align:center; }
+.ph-msg .e { font-size:180px; opacity:.5; }
+.ph-cap { position:absolute; left:56px; right:56px; top:1298px; text-align:center; }
+.ph-cap.empty { visibility:hidden; }
+.ph-cap .t { font-size:50px; font-weight:800; line-height:1.1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-shadow:0 4px 20px rgba(0,0,0,.6); }
+.ph-cap .s { margin-top:4px; font-size:30px; font-weight:700; color:#ffd24a; }
+.ph-cap .w { margin-top:6px; font-size:29px; font-style:italic; color:rgba(255,255,255,.78); line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.ph-rail { position:absolute; left:56px; right:56px; top:1476px; height:330px; display:flex; flex-direction:column; justify-content:center; gap:4px; }
+.rg { margin:6px 0 0 24px; font-size:19px; font-weight:800; letter-spacing:.34em; color:#ffd24a; text-transform:uppercase; }
+.rr { display:flex; align-items:center; gap:18px; height:48px; padding:0 24px; border-radius:25px; font-size:30px; font-weight:700; color:rgba(255,255,255,.46); transition:background .25s, color .25s; }
+.rr.on { background:rgba(255,255,255,.15); color:#fff; box-shadow:inset 0 0 0 2px rgba(255,255,255,.32); }
+.rr .ri { width:44px; text-align:center; } .rr .rn { flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .rr .rs { font-size:24px; opacity:.7; }
+.ph .pg-legend, .qz .pg-legend { position:absolute; left:50%; translate:-50% 0; width:max-content; max-width:1000px; bottom:30px; margin:0; flex-wrap:nowrap; gap:0 28px; padding:12px 28px; border-radius:40px;
+  background:rgba(16,18,28,.94); border:1.5px solid rgba(255,255,255,.14); color:#cfd8e2; font-size:25px; }
+.ph .pg-legend span, .qz .pg-legend span { gap:9px; }
+.ph .pg-k, .qz .pg-k { min-width:44px; height:44px; padding:0 10px; font-size:22px; border-radius:22px; }
+.pw-full .cap .w { max-width:100%; margin-top:2px; font-size:30px; font-style:italic; font-weight:600; color:#e8e2c8; line-height:1.28; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.pw-full .cap { gap:6px; padding-top:28px; }
+.pw-full .cap .t { font-size:50px; }
+/* Guess the Movie */
+.qz-top { position:absolute; left:56px; right:56px; top:50px; display:flex; justify-content:space-between; font-size:26px; font-weight:800; letter-spacing:.24em; color:rgba(255,255,255,.75); font-variant-numeric:tabular-nums; }
+.qz-poster { position:absolute; left:50%; top:128px; width:600px; height:900px; margin-left:-300px; border-radius:20px; overflow:hidden; background:#10141c; box-shadow:0 36px 80px rgba(0,0,0,.65); }
+.qz-poster img { width:100%; height:100%; object-fit:cover; display:block; transform:scale(1.2); filter:blur(var(--b, 34px)) grayscale(.55) brightness(.9); transition:filter .8s, transform .8s; }
+.qz-poster.rev img { transform:none; filter:none; }
+.qz-pts { position:absolute; right:22px; top:20px; padding:6px 20px; border-radius:30px; background:rgba(0,0,0,.6); font-size:34px; font-weight:800; color:#ffd24a; }
+.qz-reveal { position:absolute; left:56px; right:56px; top:1046px; height:110px; text-align:center; }
+.qz-reveal .t { font-size:52px; font-weight:800; line-height:1.1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.qz-reveal .s { margin-top:6px; font-size:32px; font-weight:700; color:#ffd24a; }
+.qz-opts { position:absolute; left:56px; right:56px; top:1172px; display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.qz-opts .o { display:flex; align-items:center; gap:20px; min-height:104px; padding:18px 26px; border-radius:28px; background:rgba(255,255,255,.1); border:3px solid rgba(255,255,255,.16); font-size:33px; font-weight:700; line-height:1.15; }
+.qz-opts .o.up, .qz-opts .o.down { grid-column:1 / -1; }
+.qz-opts .o i { flex:none; width:58px; height:58px; border-radius:50%; background:#fff; color:#12101c; display:flex; align-items:center; justify-content:center; font-style:normal; font-size:28px; font-weight:900; }
+.qz-opts .o span { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.qz-opts .o.ok { background:rgba(52,199,89,.34); border-color:#34c759; }
+.qz-opts .o.bad { background:rgba(255,59,48,.3); border-color:#ff3b30; }
+.qz-end { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; text-align:center; }
+.qz-end .e { font-size:240px; line-height:1; } .qz-end .v { font-size:96px; font-weight:900; } .qz-end .sc { font-size:220px; font-weight:900; line-height:1; color:#ffd24a; text-shadow:0 12px 50px rgba(255,210,74,.35); } .qz-end .s { font-size:40px; font-weight:700; color:rgba(255,255,255,.7); }
+.cf { position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:20; }
+.cf i { position:absolute; top:-30px; width:16px; height:26px; border-radius:3px; animation:cfFall linear forwards; }
+@keyframes cfFall { to { transform:translateY(2000px) rotate(900deg); } }

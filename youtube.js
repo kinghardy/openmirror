@@ -37,7 +37,7 @@
     mode = 'run'; show('Starting Shorts…', window.mirrorQuiet && window.mirrorQuiet() ? '🔇 Music is playing, so Shorts stays silent' : 'One moment', TIPS);
     window.MirrorExternal = true;                  // from now on the controller belongs to YouTube
     try {
-      const r = await fetch('/launch/youtube', { method: 'POST' });
+      const r = await fetch('/launch/youtube', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
       if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || 'HTTP ' + r.status);
     } catch (e) { return back(String(e.message || e)); }
     let seen = false; const t0 = Date.now();

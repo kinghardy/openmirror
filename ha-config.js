@@ -36,7 +36,7 @@ window.HA_CFG = {
     { id: 'up', icon: '🌙', name: 'Heading Up', desc: 'Table and strip off, stairs lit for a minute',
       set: { table: 'off', strip: 'off', stairs: { brightness_pct: 100, color_temp_kelvin: 3000 } },
       then: { afterSec: 60, set: { stairs: 'off' }, note: 'Stairs turn off in 1 minute' } },
-    { id: 'off', icon: '⏻', name: 'All Off', desc: 'Every basement light off',
+    { id: 'off', icon: '⏻', name: 'All Off', desc: 'Every light off',
       set: { table: 'off', strip: 'off', stairs: 'off' } }
   ],
 
