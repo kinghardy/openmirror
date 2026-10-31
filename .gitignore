@@ -16,3 +16,4 @@ tls/
 __pycache__/
 *.pyc
 promo/shots/
+ha-config.local.js

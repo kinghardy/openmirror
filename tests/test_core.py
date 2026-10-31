@@ -47,9 +47,9 @@ class Settings(unittest.TestCase):
     def setUp(self): fresh()
 
     def test_secret_is_masked_and_private(self):
-        SET.set_value("tmdb_key", "abcdefghijklmnop1234")
+        SET.set_value("tmdb_key", "FAKE-test-value-0000")
         row = [x for x in SET.view() if x["key"] == "tmdb_key"][0]
-        self.assertTrue(row["set"]); self.assertEqual(row["value"], ""); self.assertTrue(row["masked"].endswith("1234")); self.assertNotIn("abcdefghijklmnop", json.dumps(SET.view()))
+        self.assertTrue(row["set"]); self.assertEqual(row["value"], ""); self.assertTrue(row["masked"].endswith("0000")); self.assertNotIn("FAKE-test-value", json.dumps(SET.view()))
         self.assertEqual(os.stat(os.path.join(TMP, "tmdb_key")).st_mode & 0o777, 0o600)
 
     def test_game_names_default_and_can_be_renamed(self):
@@ -76,7 +76,7 @@ class Settings(unittest.TestCase):
 
     def test_first_run_and_existing_install(self):
         self.assertTrue(SET.first_run()); SET.mark_setup_done(); self.assertFalse(SET.first_run())
-        fresh(); self.assertFalse(SET.freeze_existing_setup()); SET.set_value("tmdb_key", "abcdefghijklmnop1234"); self.assertTrue(SET.freeze_existing_setup()); self.assertFalse(SET.first_run())
+        fresh(); self.assertFalse(SET.freeze_existing_setup()); SET.set_value("tmdb_key", "FAKE-test-value-0000"); self.assertTrue(SET.freeze_existing_setup()); self.assertFalse(SET.first_run())
 
 
 class Channels(unittest.TestCase):
@@ -124,7 +124,7 @@ class Channels(unittest.TestCase):
         finally: CH.has_promo = old
 
     def test_freeze_keeps_an_existing_install_unchanged(self):
-        SET.set_value("tmdb_key", "abcdefghijklmnop1234"); self.assertTrue(CH.freeze_existing()); cfg = CH.user_config(); self.assertEqual(cfg["hidden"], []); self.assertGreaterEqual(len(cfg["order"]), 11)
+        SET.set_value("tmdb_key", "FAKE-test-value-0000"); self.assertTrue(CH.freeze_existing()); cfg = CH.user_config(); self.assertEqual(cfg["hidden"], []); self.assertGreaterEqual(len(cfg["order"]), 11)
 
 
 class Themes(unittest.TestCase):

@@ -1,0 +1,9 @@
+# gitleaks configuration: the default rules, plus one allowance for the test files, whose "keys" are made-up values (they start with FAKE-).
+title = "OpenMirror"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "made-up values in tests"
+paths = ['''^tests/''', '''^tools/smoke\.py$''']

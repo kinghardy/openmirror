@@ -54,7 +54,8 @@ def web_build():
             for f in sorted(files):
                 if (root == DIR and f in ("index.html", "posters-curated.json") or root == DIR and f.endswith(".js") or root != DIR and f.endswith((".js", ".css", ".json"))):
                     p = os.path.join(root, f); h.update(f"{os.path.relpath(p, DIR)}:{int(os.path.getmtime(p))}:".encode())
-        if os.path.exists(CH.CONFIG): h.update(f"channels.json:{int(os.path.getmtime(CH.CONFIG))}:".encode())       # (the owner's tile choices)
+        for extra in (CH.CONFIG, os.path.join(CFG_DIR, "ha-config.js")):
+            if os.path.exists(extra): h.update(f"{os.path.basename(extra)}:{int(os.path.getmtime(extra))}:".encode())
     except OSError: pass
     _WEB.update(at=time.time(), sig=h.hexdigest()[:12]); return _WEB["sig"]
 
@@ -122,6 +123,11 @@ class H(SimpleHTTPRequestHandler):
             except OSError: return self.send_error(404)
             b = CH.render_index(raw).encode(); self.send_response(200); self.send_header("Content-Type", "text/html; charset=utf-8"); self.send_header("Content-Length", str(len(b))); self.send_header("Cache-Control", "no-store"); self.end_headers(); return self.wfile.write(b)
         if self.path == "/mirror/config": return self.send_json(200, {"location": SET.location(), "units": SET.get("units"), "house": SET.get("house_name"), "games_name": SET.get("games_name"), "slots_name": SET.get("slots_name"), "first_run": SET.first_run()})       # (what the page needs from the settings; nothing secret)
+        if self.path.split("?")[0] == "/ha-config.local.js":             # the owner's own lights file: it replaces the shipped example when it exists
+            try:
+                with open(os.path.join(CFG_DIR, "ha-config.js"), "rb") as f: b = f.read(200000)
+            except OSError: b = b"// no local lights file\n"
+            self.send_response(200); self.send_header("Content-Type", "application/javascript"); self.send_header("Content-Length", str(len(b))); self.send_header("Cache-Control", "no-store"); self.end_headers(); return self.wfile.write(b)
         if self.path == "/channels/list": return self.send_json(200, {"channels": CH.effective()})
         if self.path == "/settings/speakers":
             if not self.settings_guard(): return

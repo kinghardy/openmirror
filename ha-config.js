@@ -1,14 +1,15 @@
-// Basement Lights channel (#app-lights in index.html). Edit freely, then reload the kiosk.
+// Lights channel (#app-lights in index.html): an EXAMPLE. Copy this file to ~/.config/mirror/ha-config.js and edit that copy:
+// if it exists it replaces this one (so your device names stay out of the project folder). Reload the kiosk after editing.
 window.HA_CFG = {
-  // The basement lights, in the order shown on screen. `key` is how scenes refer to them.
+  // The lights, in the order shown on screen. `key` is how scenes refer to them.
   // sendLast: scenes change this light AFTER the others. The Zigbee lights are sent first; once Home
   //   Assistant confirms them (or maxWaitMs passes) the strip follows. afterMs adds an extra pause
   //   before the strip (0 = right away); raise it if the strip should come in later.
   // noFade: the light can't do smooth transitions (Govee), so it never gets one.
   lights: [
-    { key: 'table',  entity: 'light.pool_table',            name: 'Pool Table',  icon: '🎱' },
-    { key: 'strip',  entity: 'light.govee_h617a',           name: 'Light Strip', icon: '🌈', sendLast: true, afterMs: 0, maxWaitMs: 4000, noFade: true },
-    { key: 'stairs', entity: 'light.basement_stairs_light', name: 'Stairs',      icon: '🪜' }
+    { key: 'table',  entity: 'light.example_table',            name: 'Pool Table',  icon: '🎱' },
+    { key: 'strip',  entity: 'light.example_strip',           name: 'Light Strip', icon: '🌈', sendLast: true, afterMs: 0, maxWaitMs: 4000, noFade: true },
+    { key: 'stairs', entity: 'light.example_stairs', name: 'Stairs',      icon: '🪜' }
   ],
 
   fadeSec: 1.5,   // fade time for scene changes on lights that support it

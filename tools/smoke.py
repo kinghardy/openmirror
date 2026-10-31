@@ -142,6 +142,8 @@ s, d = spost("/settings/set", {"key": "units", "value": "furlongs"}, SH); ok("un
 s, d = spost("/settings/geocode", {"q": "a"}, SH); ok("a place search needs a few letters", s == 400)
 s, d = spost("/settings/geocode", {"q": "Paris"}); ok("a place search needs our header", s == 403)
 
+s, b = get(M + "/ha-config.local.js"); ok("the owner's lights file is served (or a harmless stub)", s == 200 and b"HA_CFG" in b or b"no local" in b)
+s, b = get(M + "/ha-config.js"); ok("the shipped lights file is only an example", s == 200 and b"light.example_" in b and b"basement" not in b.lower().replace(b"basement lights", b""))
 print("getting started (speaker picker, checklist, first run)")
 import mirror_sonos as _MS
 ok("a speaker description is read", _MS.parse_speaker("1.2.3.4", "<r><roomName>Kitchen</roomName><modelName>Sonos One</modelName></r>") == ("Kitchen", "Sonos One"))
